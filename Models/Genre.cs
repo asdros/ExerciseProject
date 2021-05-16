@@ -1,0 +1,29 @@
+﻿namespace ExerciseProject.Models
+{
+    public enum Genre
+    {
+        Action,
+        Adventure,
+        Animation,
+        Biography,
+        Comedy,
+        Crime,
+        Documentary,
+        Drama,
+        Family,
+        Fantasy,
+        Film_Noir,
+        History,
+        Horror,
+        Music,
+        Musical,
+        Mystery,
+        Romance,
+        Sci_Fi,
+        Sport,
+        Superhero,
+        Thriller,
+        War,
+        Western
+    }
+}
