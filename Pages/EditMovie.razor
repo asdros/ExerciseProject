@@ -1,0 +1,58 @@
+﻿@page "/editMovie/{Id:guid}"
+@inject IMovieService movieService
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+
+
+<h3>Edit Movie</h3>
+
+<div class="row">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="Title" class="custom-control-label">Name</label>
+                <input form="Title" class="form-control" @bind-value="@movie.Title" />
+                <label for="Title" class="custom-control-label">Year of production</label>
+                <input form="Title" class="form-control" @bind-value="@movie.YearOfProduction" />
+                <label for="Title" class="custom-control-label">Original soundtrack</label>
+                <input form="Title" class="form-control" @bind-value="@movie.OriginalSoundtrack" />
+                <label for="Title" class="custom-control-label">Genre</label>
+                <input form="Title" class="form-control" @bind-value="@movie.Genre" />
+                <label for="Title" class="custom-control-label">Director</label>
+                <input form="Title" class="form-control" @bind-value="@movie.DirectorID" />
+                <label for="Title" class="custom-control-label">Description</label>
+                <input form="Title" class="form-control" @bind-value="@movie.Description" />
+                <label for="Title" class="custom-control-label">Other titles</label>
+                <input form="Title" class="form-control" @bind-value="@movie.OtherTitles" />
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" @onclick="() => UpdateMovie()">Save</button>
+                <button type="button" class="btn btn-warning" @onclick="() => Cancel()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@code {
+
+    [Parameter]
+    public Guid Id { get; set; }
+    Movie movie = new Movie();
+
+    protected override async Task OnInitializedAsync()
+    {
+        movie = await movieService.GetById(Id);
+    }
+
+    protected async Task UpdateMovie()
+    {
+        await movieService.Update(movie);
+        navigationManager.NavigateTo("/movieList");
+    }
+
+    protected void Cancel()
+    {
+        navigationManager.NavigateTo("/movieList");
+    }
+}

@@ -12,29 +12,24 @@ namespace ExerciseProject.Models
         public string Title { get; protected set; }
         public string Description { get; protected set; }
         [Required]
-        public Soundtrack Language { get; protected set; }
+        public string Language { get; protected set; }
         [Required]
         [ForeignKey("Movie")]
         public Guid MovieID { get; protected set; }
-        [Required]
-        [ForeignKey("User")]
-        public Guid UserID { get; protected set; }
         [Required]
         public DateTime AddedOn { get; protected set; }
         public UploadFile SubtitlesFileName { get; protected set; }
 
         public virtual Movie Movie { get; set; }
-        public virtual User User { get; set; }
 
 
-        public Subtitles(Guid subtitlesID, string title, string description, Soundtrack language, Guid movieID, Guid userID, string subtitlesFileFormat, string subtitlesFileName)
+        public Subtitles(Guid subtitlesID, string title, string description, string language, Guid movieID, string subtitlesFileFormat, string subtitlesFileName)
         {
             ID = subtitlesID;
             SetTitle(title);
             SetDescription(description);
             // todo enum set
             MovieID = movieID;
-            UserID = userID;
             // todo save object model from second table
         }
 
