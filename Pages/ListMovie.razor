@@ -1,4 +1,4 @@
-﻿@page "/movieList"
+﻿@page "/"
 @inject IMovieService movieService
 
 <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0
@@ -26,13 +26,12 @@
 
 <div>
     <a class="btn btn-primary"
-       href='/addMovie'>Add new data</a>
+       href='/addMovie'>Add new movie</a>
 </div>
-<br />
 
 @if (movies == null)
 {
-   <p><em> Loading...</em></p>
+    <p><em> Loading...</em></p>
 }
 else
 {
@@ -47,22 +46,35 @@ else
             <tr>
                 <th class="sort-th"
                     @onclick="@(() => SortTable("Title"))">
-                    Id<span class="fa @(SetSortIcon("Title"))"></span>
+                    Title<span class="fa @(SetSortIcon("Title"))"></span>
                 </th>
                 <th class="sort-th"
-                    @onclick="@(() => SortTable("Name"))">
-                    Name
-                    <span class="fa @(SetSortIcon("Name"))"></span>
+                    @onclick="@(() => SortTable("YearOfProduction"))">
+                    Year Of Production
+                    <span class="fa @(SetSortIcon("YearOfProduction"))"></span>
                 </th>
                 <th class="sort-th"
-                    @onclick="@(() => SortTable("City"))">
-                    City
-                    <span class="fa @(SetSortIcon("City"))"></span>
+                    @onclick="@(() => SortTable("OriginalSoundtrack"))">
+                    Original soundtrack
+                    <span class="fa @(SetSortIcon("OriginalSoundtrack"))"></span>
                 </th>
                 <th class="sort-th"
-                    @onclick="@(() => SortTable("Country"))">
-                    Country
-                    <span class="fa @(SetSortIcon("Country"))"></span>
+                    @onclick="@(() => SortTable("Genre"))">
+                    Genre
+                    <span class="fa @(SetSortIcon("Genre"))"></span>
+                </th>
+                <th class="sort-th"
+                    @onclick="@(() => SortTable("DirectorID"))">
+                    Director
+                    <span class="fa @(SetSortIcon("DirectorID"))"></span>
+                </th>
+                <th class="sort-th">
+                    Other titles
+                </th>
+                <th class="sort-th"
+                    @onclick="@(() => SortTable("CreatedAt"))">
+                    Created At
+                    <span class="fa @(SetSortIcon("CreatedAt"))"></span>
                 </th>
                 <th>Action</th>
             </tr>
@@ -78,23 +90,22 @@ else
             {
                 foreach (var movie in movies)
                 {
-        <tr>
-            <td>@movie.Title</td>
-            <td>@movie.YearOfProduction</td>
-            <td>@movie.OriginalSoundtrack</td>
-            <td>@movie.Genre</td>
-            <td>@movie.DirectorID</td>
-            <td>@movie.Description</td>
-            <td>@movie.OtherTitles</td>
-            <td>@movie.CreatedAt</td>
-            <td>
-                <a class="btn btn-primary"
-                   href='/editMovie/@movie.ID'>Edit</a>
-                󠀠󠀠󠀠󠀠<a class="btn btn-warning" @onclick="() => DeleteMovie(movie.ID)">
-                    Delete
-                </a>
-            </td>
-        </tr>
+                    <tr>
+                        <td>@movie.Title</td>
+                        <td>@movie.YearOfProduction</td>
+                        <td>@movie.OriginalSoundtrack</td>
+                        <td>@movie.Genre</td>
+                        <td>@movie.DirectorID</td>
+                        <td>@movie.OtherTitles</td>
+                        <td>@movie.CreatedAt</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm"
+                               href='/editMovie/@movie.ID'>Edit</a>
+                            󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" @onclick="() => DeleteMovie(movie.ID)">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
                 }
             }
         </tbody>

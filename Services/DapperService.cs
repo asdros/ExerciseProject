@@ -22,31 +22,25 @@ namespace ExerciseProject.Services
             return new SqlConnection
                (_config.GetConnectionString("DefaultConnection"));
         }
-        public T Get<T>(string sp, DynamicParameters parms,
-           CommandType commandType = CommandType.StoredProcedure)
+        public T Get<T>(string sp, CommandType commandType = CommandType.Text)
         {
             using IDbConnection db = new SqlConnection
                (_config.GetConnectionString("DefaultConnection"));
-            return db.Query<T>(sp, parms,
-               commandType: commandType).FirstOrDefault();
+            return db.Query<T>(sp, commandType: commandType).FirstOrDefault();
         }
-        public List<T> GetAll<T>(string sp, DynamicParameters parms,
-           CommandType commandType = CommandType.StoredProcedure)
+        public List<T> GetAll<T>(string sp, CommandType commandType = CommandType.Text)
         {
             using IDbConnection db = new SqlConnection
                (_config.GetConnectionString("DefaultConnection"));
-            return db.Query<T>(sp, parms,
-               commandType: commandType).ToList();
+            return db.Query<T>(sp, commandType: commandType).ToList();
         }
-        public int Execute(string sp, DynamicParameters parms,
-           CommandType commandType = CommandType.StoredProcedure)
+        public int Execute(string sp, CommandType commandType = CommandType.StoredProcedure)
         {
             using IDbConnection db = new SqlConnection
                (_config.GetConnectionString("DefaultConnection"));
-            return db.Execute(sp, parms, commandType: commandType);
+            return db.Execute(sp, commandType: commandType);
         }
-        public T Insert<T>(string sp, DynamicParameters parms,
-           CommandType commandType = CommandType.StoredProcedure)
+        public T Insert<T>(string sp, CommandType commandType = CommandType.Text)
         {
             T result;
             using IDbConnection db = new SqlConnection
@@ -58,7 +52,7 @@ namespace ExerciseProject.Services
                 using var tran = db.BeginTransaction();
                 try
                 {
-                    result = db.Query<T>(sp, parms, commandType:
+                    result = db.Query<T>(sp, commandType:
                        commandType, transaction: tran).FirstOrDefault();
                     tran.Commit();
                 }
