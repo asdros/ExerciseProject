@@ -13,7 +13,8 @@
                 <input form="Title" class="form-control" @bind-value="@movie.Title" />
                 <br />
                 <label for="YearOfProduction">Year of production</label>
-                <input form="YearOfProduction" class="form-control" @bind-value="@movie.YearOfProduction" />
+                <input form="YearOfProduction" class="form-control"
+                       @bind-value="@movie.YearOfProduction" />
                 <br />
                 <label for="OriginalSoundtrack">Original soundtrack</label>
                 <br />
@@ -36,13 +37,17 @@
                 <br />
                 <br />
                 <label for="DirectorID">Director</label>
-                <input form="DirectorID" class="form-control" @bind-value="@movie.DirectorID" />
+                <input form="DirectorID" class="form-control"
+                       @bind-value="@movie.DirectorID" />
                 <br />
                 <label for="Description">Description</label>
-                <input form="Description" class="form-control" @bind-value="@movie.Description" />
+                <textarea form="Description" class="form-control"
+                          @bind="@movie.Description">
+                </textarea>
                 <br />
                 <label for="OtherTitles">Other titles</label>
-                <input form="OtherTitles" class="form-control" @bind-value="@movie.OtherTitles" />
+                <input form="OtherTitles" class="form-control"
+                       @bind-value="@movie.OtherTitles" />
             </div>
             <div class="form-group">
                 <button type="button" class="btn btn-primary" @onclick="() => UpdateMovie()">Save</button>

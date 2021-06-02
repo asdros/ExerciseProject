@@ -1,5 +1,6 @@
 ﻿@page "/addMovie"
 @inject IMovieService movieService
+@inject IDirectorService directorService
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 
 
@@ -10,10 +11,12 @@
         <form>
             <div class="form-group">
                 <label for="Title">Title</label>
-                <input form="Title" class="form-control"/>
+                <input form="Title" class="form-control"
+                       @bind-value="@movie.Title" />
                 <br />
                 <label for="YearOfProduction">Year of production</label>
-                <input form="YearOfProduction" class="form-control" />
+                <input form="YearOfProduction" class="form-control"
+                       @bind-value="@movie.YearOfProduction" />
                 <br />
                 <label for="OriginalSoundtrack">Original soundtrack</label>
                 <br />
@@ -36,13 +39,21 @@
                 <br />
                 <br />
                 <label for="DirectorID">Director</label>
-                <input form="DirectorID" class="form-control" @bind-value="@movie.DirectorID" />
+                <br />
+                <select form="DirectorID" @bind="movie.DirectorID" style="width:200px">
+                    @foreach (var director in directors)
+                    {
+                        <option value="@director.ID">@director.Firstname  @director.Surname</option>
+                    }
+                </select>
                 <br />
                 <label for="Description">Description</label>
-                <input form="Description" class="form-control" />
+                <textarea form="Description" class="form-control"
+                          @bind="@movie.Description"></textarea>
                 <br />
                 <label for="OtherTitles">Other titles</label>
-                <input form="OtherTitles" class="form-control" />
+                <input form="OtherTitles" class="form-control"
+                       @bind-value="@movie.OtherTitles" />
             </div>
             <div class="form-group">
                 <button type="button" class="btn btn-primary" @onclick="() => CreateMovie()">Save</button>
@@ -56,6 +67,12 @@
 
 @code {
     Movie movie = new Movie();
+    List<Director> directors = new List<Director>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        directors = await directorService.FetchAll();
+    }
 
     protected async Task CreateMovie()
     {

@@ -73,8 +73,7 @@ namespace ExerciseProject.Services
             }
             return result;
         }
-        public T Update<T>(string sp, DynamicParameters parms,
-           CommandType commandType = CommandType.StoredProcedure)
+        public T Update<T>(string sp, CommandType commandType = CommandType.Text)
         {
             T result;
             using IDbConnection db = new SqlConnection
@@ -86,7 +85,7 @@ namespace ExerciseProject.Services
                 using var tran = db.BeginTransaction();
                 try
                 {
-                    result = db.Query<T>(sp, parms, commandType:
+                    result = db.Query<T>(sp, commandType:
                        commandType, transaction: tran).FirstOrDefault();
                     tran.Commit();
                 }

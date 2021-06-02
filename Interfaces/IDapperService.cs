@@ -13,7 +13,6 @@ namespace ExerciseProject.Interfaces
         List<T> GetAll<T>(string sp, CommandType commandType = CommandType.Text);
         int Execute(string sp, CommandType commandType = CommandType.Text);
         T Insert<T>(string sp, CommandType commandType = CommandType.Text);
-        T Update<T>(string sp, DynamicParameters parms,
-           CommandType commandType = CommandType.Text);
+        T Update<T>(string sp, CommandType commandType = CommandType.Text);
     }
 }

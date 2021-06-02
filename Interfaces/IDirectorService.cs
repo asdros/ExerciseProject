@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace ExerciseProject.Interfaces
 {
-    public interface IMovieService
+    public interface IDirectorService
     {
-        Task<int> Create(Movie movie);
+        Task<int> Create(Director director);
         Task<int> Delete(Guid id);
         Task<int> Count(string search);
-        Task<int> Update(Movie movie);
-        Task<Movie> GetById(Guid id);
-        Task<List<Movie>> ListAll(int skip, int take,
+        Task<int> Update(Director director);
+        Task<Director> GetById(Guid id);
+        Task<List<Director>> ListAll(int skip, int take,
             string orderBy, string direction, string search);
+        Task<List<Director>> FetchAll();
     }
 }

@@ -1,12 +1,9 @@
-﻿using Dapper;
-using ExerciseProject.Interfaces;
+﻿using ExerciseProject.Interfaces;
 using ExerciseProject.Models;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ExerciseProject.Services
@@ -31,7 +28,6 @@ namespace ExerciseProject.Services
    (_dapperService.Insert<int>($"INSERT INTO [dbo].[Movie] ([Title] ,[YearOfProduction] ,[OriginalSoundtrack] ,[Genre] ,[DirectorID] ,[Description] ,[OtherTitles] ,[CreatedAt] ,[PosterId]) VALUES ('{movie.Title}',{movie.YearOfProduction},'{movie.OriginalSoundtrack}','{movie.Genre}',CAST('{movie.DirectorID}' AS UNIQUEIDENTIFIER),'{movie.Description}','{movie.OtherTitles}','{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}', NULL);",
     commandType: CommandType.Text));
             return movieId;
- 
         }
         public Task<Movie> GetById(Guid id)
         {
@@ -51,10 +47,10 @@ namespace ExerciseProject.Services
         }
         public Task<int> Count(string search)
         {
-            var totPublisher = Task.FromResult(_dapperService.Get<int>
+            var movieCount = Task.FromResult(_dapperService.Get<int>
                ($"select COUNT(*) from [Movie] WHERE Title like '%{search}%'",
                commandType: CommandType.Text));
-            return totPublisher;
+            return movieCount;
         }
         public Task<List<Movie>> ListAll(int skip, int take,
            string orderBy, string direction = "DESC", string search = "")
@@ -67,19 +63,9 @@ namespace ExerciseProject.Services
         }
         public Task<int> Update(Movie movie)
         {
-            var dbPara = new DynamicParameters();
-            dbPara.Add("Title", movie.Title, DbType.String);
-            dbPara.Add("YearOfProduction", movie.YearOfProduction, DbType.Int16);
-            dbPara.Add("OriginalSoundtrack", movie.OriginalSoundtrack, DbType.String);
-            dbPara.Add("Genre", movie.Genre, DbType.String);
-            dbPara.Add("DirectorID", movie.DirectorID, DbType.Guid);
-            dbPara.Add("Description", movie.Description, DbType.String);
-            dbPara.Add("OtherTitles", movie.OtherTitles, DbType.String);
-            dbPara.Add("CreatedAt", DateTime.UtcNow, DbType.DateTime);
-            var updatePublisher = Task.FromResult
-               (_dapperService.Update<int>("[dbo].[spUpdatePublisher]                                                                   ",
-               dbPara, commandType: CommandType.Text));
-            return updatePublisher;
+            var updateMovie = Task.FromResult
+               (_dapperService.Update<int>("", commandType: CommandType.Text)); //todo
+            return updateMovie;
         }
     }
 }
