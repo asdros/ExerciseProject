@@ -77,11 +77,11 @@
     protected async Task CreateMovie()
     {
         await movieService.Create(movie);
-        navigationManager.NavigateTo("/");
+        navigationManager.NavigateTo("/movies");
     }
 
     protected void Cancel()
     {
-        navigationManager.NavigateTo("/");
+        navigationManager.NavigateTo("/movies");
     }
 }

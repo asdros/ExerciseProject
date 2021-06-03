@@ -30,8 +30,8 @@ namespace ExerciseProject.Services
         public Task<int> Create(Director director)
         {
             var directorId = Task.FromResult
-   (_dapperService.Insert<int>($"INSERT INTO [dbo].[Director] ([Firstname], [Surname]) VALUES ('{director.Firstname}', '{director.Surname}');",
-    commandType: CommandType.Text));
+                (_dapperService.Insert<int>($"INSERT INTO [dbo].[Director] ([Firstname], [Surname]) VALUES ('{director.Firstname}', '{director.Surname}');",
+                commandType: CommandType.Text));
             return directorId;
         }
 
@@ -73,7 +73,10 @@ namespace ExerciseProject.Services
 
         public Task<int> Update(Director director)
         {
-            throw new NotImplementedException();
+            var updateDirector = Task.FromResult(_dapperService.
+                 Update<int>($"UPDATE [dbo].[Director] SET [Firstname] = '{director.Firstname}', [Surname] = '{director.Surname}' WHERE [Id] = CAST('{director.ID}' AS UNIQUEIDENTIFIER)",
+                 commandType: CommandType.Text));
+            return updateDirector;
         }
     }
 }

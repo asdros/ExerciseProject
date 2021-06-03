@@ -28,29 +28,32 @@
     <a class="btn btn-primary"
        href='/addDirector'>Add new director</a>
 </div>
-
+<br />
 @if (directors == null)
 {
     <p><em> Loading...</em></p>
 }
 else
 {
-    <div class="row col-md-3 pull-right">
+    <div class="row col-md-3 pull-left">
         <input type="text" id="txtSearch"
                placeholder="Search firstname or surname..."
                class="form-control" @bind="SearchTerm"
                @bind:event="oninput" />
     </div>
+    <br />
+    <br />
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
                 <th class="sort-th"
                     @onclick="@(() => SortTable("Firstname"))">
-                    Title<span class="fa @(SetSortIcon("Firstname"))"></span>
+                    Firstname
+                    <span class="fa @(SetSortIcon("Firstname"))"></span>
                 </th>
                 <th class="sort-th"
                     @onclick="@(() => SortTable("Surname"))">
-                    Year Of Production
+                    Surname
                     <span class="fa @(SetSortIcon("Surname"))"></span>
                 </th>
 

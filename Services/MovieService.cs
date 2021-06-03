@@ -18,17 +18,15 @@ namespace ExerciseProject.Services
             _configuration = configuration;
             _dapperService = dapperService;
         }
-        public Task<int> Create(Movie movie)
-        {
-            //var movieId = Task.FromResult
-            //   (_dapperService.Insert<int>($"INSERT INTO [dbo].[Movie] ([Title] ,[YearOfProduction] ,[OriginalSoundtrack] ,[Genre] ,[DirectorID] ,[Description] ,[OtherTitles] ,[CreatedAt] ,[PosterId]) VALUES ('{movie.Title}',{movie.YearOfProduction},'{movie.OriginalSoundtrack}','{movie.Genre}',CAST('{movie.DirectorID}' AS UNIQUEIDENTIFIER),'{movie.Description}','{movie.OtherTitles}','{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}',CAST('{movie.PosterID}' AS UNIQUEIDENTIFIER));",
-            //    commandType: CommandType.Text));
 
+        public Task<int> Create(Movie movie)
+        {           
             var movieId = Task.FromResult
    (_dapperService.Insert<int>($"INSERT INTO [dbo].[Movie] ([Title] ,[YearOfProduction] ,[OriginalSoundtrack] ,[Genre] ,[DirectorID] ,[Description] ,[OtherTitles] ,[CreatedAt] ,[PosterId]) VALUES ('{movie.Title}',{movie.YearOfProduction},'{movie.OriginalSoundtrack}','{movie.Genre}',CAST('{movie.DirectorID}' AS UNIQUEIDENTIFIER),'{movie.Description}','{movie.OtherTitles}','{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}', NULL);",
     commandType: CommandType.Text));
             return movieId;
         }
+
         public Task<Movie> GetById(Guid id)
         {
             var movie = Task.FromResult
@@ -37,6 +35,7 @@ namespace ExerciseProject.Services
                commandType: CommandType.Text));
             return movie;
         }
+
         public Task<int> Delete(Guid id)
         {
             var deleteMovie = Task.FromResult
@@ -45,6 +44,7 @@ namespace ExerciseProject.Services
                commandType: CommandType.Text));
             return deleteMovie;
         }
+
         public Task<int> Count(string search)
         {
             var movieCount = Task.FromResult(_dapperService.Get<int>
@@ -52,19 +52,21 @@ namespace ExerciseProject.Services
                commandType: CommandType.Text));
             return movieCount;
         }
-        public Task<List<Movie>> ListAll(int skip, int take,
+
+        public Task<List<MovieDirector>> ListAll(int skip, int take,
            string orderBy, string direction = "DESC", string search = "")
         {
             var movies = Task.FromResult
-               (_dapperService.GetAll<Movie>
-               ($"SELECT * FROM [Movie] WHERE Title like'%{search}%' ORDER BY {orderBy} {direction} " +
+               (_dapperService.GetAll<MovieDirector>
+               ($"SELECT [Movie].*, [Director].[Firstname], [Director].[Surname] FROM [Movie] LEFT OUTER JOIN [Director] ON [Movie].[DirectorID] = [Director].[Id] WHERE Title like'%{search}%' ORDER BY {orderBy} {direction} " +
                $"OFFSET {skip} ROWS FETCH NEXT {take} ROWS ONLY; ", commandType: CommandType.Text));
             return movies;
         }
+
         public Task<int> Update(Movie movie)
         {
             var updateMovie = Task.FromResult
-               (_dapperService.Update<int>("", commandType: CommandType.Text)); //todo
+               (_dapperService.Update<int>($"UPDATE [dbo].[Movie] SET [Title] = '{movie.Title}', [YearOfProduction] = '{movie.YearOfProduction}', [OriginalSoundtrack] = '{movie.OriginalSoundtrack}', [Genre] = '{movie.Genre}', [DirectorID] = '{movie.DirectorID}', [Description] = '{movie.Description}', [OtherTitles] = '{movie.OtherTitles}', [CreatedAt] = '{DateTime.UtcNow.ToString("yyyy - MM - dd HH: mm:ss")}', [PosterId] = NULL WHERE [Id] = CAST('{movie.ID}' AS UNIQUEIDENTIFIER)", commandType: CommandType.Text)); //todo
             return updateMovie;
         }
     }

@@ -13,7 +13,7 @@ namespace ExerciseProject.Interfaces
         Task<int> Count(string search);
         Task<int> Update(Movie movie);
         Task<Movie> GetById(Guid id);
-        Task<List<Movie>> ListAll(int skip, int take,
+        Task<List<MovieDirector>> ListAll(int skip, int take,
             string orderBy, string direction, string search);
     }
 }

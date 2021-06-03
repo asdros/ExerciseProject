@@ -1,5 +1,6 @@
-﻿@page "/"
+﻿@page "/movies"
 @inject IMovieService movieService
+@inject IDirectorService directorService
 
 <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0
 /css/font-awesome.min.css" rel="stylesheet">
@@ -28,6 +29,7 @@
     <a class="btn btn-primary"
        href='/addMovie'>Add new movie</a>
 </div>
+<br />
 
 @if (movies == null)
 {
@@ -35,12 +37,14 @@
 }
 else
 {
-    <div class="row col-md-3 pull-right">
+    <div class="row col-md-3 pull-left">
         <input type="text" id="txtSearch"
-               placeholder="Search Names..."
+               placeholder="Search Titles or Director's surname..."
                class="form-control" @bind="SearchTerm"
                @bind:event="oninput" />
     </div>
+    <br />
+    <br />
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
@@ -63,12 +67,10 @@ else
                     Genre
                     <span class="fa @(SetSortIcon("Genre"))"></span>
                 </th>
-                <th class="sort-th"
-                    @onclick="@(() => SortTable("DirectorID"))">
+                <th>
                     Director
-                    <span class="fa @(SetSortIcon("DirectorID"))"></span>
                 </th>
-                <th class="sort-th">
+                <th>
                     Other titles
                 </th>
                 <th class="sort-th"
@@ -95,7 +97,7 @@ else
                         <td>@movie.YearOfProduction</td>
                         <td>@movie.OriginalSoundtrack</td>
                         <td>@movie.Genre</td>
-                        <td>@movie.DirectorID</td>
+                        <td>@movie.Firstname @movie.Surname</td>
                         <td>@movie.OtherTitles</td>
                         <td>@movie.CreatedAt</td>
                         <td>
@@ -141,7 +143,7 @@ else
         set { searchTerm = value; FilterRecords(); }
     }
 
-    List<Movie> movies;
+    List<MovieDirector> movies;
 
     #region Pagination
 
@@ -180,7 +182,7 @@ else
     private bool isSortedAscending;
     private string activeSortColumn;
 
-    private async Task<List<Movie>>
+    private async Task<List<MovieDirector>>
             SortRecords(string columnName, string dir)
     {
         return await movieService.ListAll((curPage - 1) *

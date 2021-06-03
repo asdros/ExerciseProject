@@ -1,5 +1,6 @@
 ﻿@page "/editMovie/{Id:guid}"
 @inject IMovieService movieService
+@inject IDirectorService directorService
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 
 
@@ -37,8 +38,14 @@
                 <br />
                 <br />
                 <label for="DirectorID">Director</label>
-                <input form="DirectorID" class="form-control"
-                       @bind-value="@movie.DirectorID" />
+                <br />
+                <select form="DirectorID" @bind="movie.DirectorID" style="width:200px">
+                    @foreach (var director in directors)
+                    {
+                        <option value="@director.ID">@director.Firstname  @director.Surname</option>
+                    }
+                </select>
+                <br />
                 <br />
                 <label for="Description">Description</label>
                 <textarea form="Description" class="form-control"
@@ -63,21 +70,25 @@
 
     [Parameter]
     public Guid Id { get; set; }
+
     Movie movie = new Movie();
+    List<Director> directors = new List<Director>();
+
 
     protected override async Task OnInitializedAsync()
     {
+        directors = await directorService.FetchAll();
         movie = await movieService.GetById(Id);
     }
 
     protected async Task UpdateMovie()
     {
         await movieService.Update(movie);
-        navigationManager.NavigateTo("/");
+        navigationManager.NavigateTo("/movies");
     }
 
     protected void Cancel()
     {
-        navigationManager.NavigateTo("/");
+        navigationManager.NavigateTo("/movies");
     }
 }
