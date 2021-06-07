@@ -8,7 +8,7 @@ namespace ExerciseProject.Interfaces
 {
     public interface IMovieService
     {
-        Task<int> Create(Movie movie);
+        Task<int> Create(MovieView movie);
         Task<int> Delete(Guid id);
         Task<int> Count(string search);
         Task<int> Update(Movie movie);

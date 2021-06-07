@@ -3,71 +3,96 @@
 @inject IDirectorService directorService
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 
-
+<title>Add Movie</title>
 <h3>Add Movie</h3>
-
 <div class="row">
     <div class="col-md-4">
         <form>
             <div class="form-group">
-                <label for="Title">Title</label>
-                <input form="Title" class="form-control"
-                       @bind-value="@movie.Title" />
-                <br />
-                <label for="YearOfProduction">Year of production</label>
-                <input form="YearOfProduction" class="form-control"
-                       @bind-value="@movie.YearOfProduction" />
-                <br />
-                <label for="OriginalSoundtrack">Original soundtrack</label>
-                <br />
-                <select form="OriginalSoundtrack" @bind="movie.OriginalSoundtrack" style="width:200px">
-                    @foreach (var language in Enum.GetValues(typeof(Soundtrack)))
-                    {
-                        <option value="@language">@language</option>
-                    }
-                </select>
-                <br />
-                <br />
-                <label for="Genre">Genre</label>
-                <br />
-                <select form="Genre" @bind="movie.Genre" style="width:200px">
-                    @foreach (var gender in Enum.GetValues(typeof(Genre)))
-                    {
-                        <option value="@gender">@gender</option>
-                    }
-                </select>
-                <br />
-                <br />
-                <label for="DirectorID">Director</label>
-                <br />
-                <select form="DirectorID" @bind="movie.DirectorID" style="width:200px">
-                    @foreach (var director in directors)
-                    {
-                        <option value="@director.ID">@director.Firstname  @director.Surname</option>
-                    }
-                </select>
-                <br />
-                <label for="Description">Description</label>
-                <textarea form="Description" class="form-control"
-                          @bind="@movie.Description"></textarea>
-                <br />
-                <label for="OtherTitles">Other titles</label>
-                <input form="OtherTitles" class="form-control"
-                       @bind-value="@movie.OtherTitles" />
-            </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" @onclick="() => CreateMovie()">Save</button>
-                <button type="button" class="btn btn-warning" @onclick="() => Cancel()">Cancel</button>
-            </div>
+                    <label for="Title">Title</label>
+                    <input form="Title" class="form-control"
+                           @bind-value="@movie.Title" />
+                    <br />
+                    <label for="YearOfProduction">Year of production</label>
+                    <input form="YearOfProduction" class="form-control" placeholder="2000"
+                           @bind-value="@movie.YearOfProduction" />
+                    <br />
+                <div class="row">
+                    <div class="col">
+                    <label for="OriginalSoundtrack">Original soundtrack</label>
+                    <br />
+                    <select class="custom-select" form="OriginalSoundtrack" @bind="movie.OriginalSoundtrack">
+                        @foreach (var language in Enum.GetValues(typeof(Soundtrack)))
+                        {
+                            <option value="@language">@language</option>
+                        }
+                    </select>
+                        </div>
+                    <div class="col">
+                    <label for="Genre">Genre</label>
+                    <br />
+                    <select class="custom-select" form="Genre" @bind="movie.Genre">
+                        @foreach (var gender in Enum.GetValues(typeof(Genre)))
+                        {
+                            <option value="@gender">@gender</option>
+                        }
+                    </select>
+                        </div>
+                    </div>
+                    <br />
+                    <label for="DirectorID">Director</label>
+                    <br />
+                    <select class="custom-select" form="DirectorID" @bind="movie.DirectorID">
+                        @foreach (var director in directors)
+                        {
+                            <option value="@director.ID">@director.Firstname  @director.Surname</option>
+                        }
+                    </select>
+                    <br />
+                    <br />
+                    <label for="Description">Description</label>
+                    <textarea form="Description" class="form-control"
+                              @bind="@movie.Description"></textarea>
+                    <br />
+                    <label for="OtherTitles">Other titles</label>
+                    <input form="OtherTitles" class="form-control"
+                           @bind-value="@movie.OtherTitles" />
+                    <br />
+                    <label for="Image">Image</label>
+                    <InputFile OnChange="LoadFile" bind-value="@movie.FileData" />
+                </div>
+                <hr />
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" @onclick="() => CreateMovie()">Save</button>
+                    <button type="button" class="btn btn-warning" @onclick="() => Cancel()">Cancel</button>
+                </div>
         </form>
+    </div>
+    <div class="col-md-5">
+        <img src="@imageDataFile" />
     </div>
 </div>
 
 
 
 @code {
-    Movie movie = new Movie();
+    MovieView movie = new MovieView();
     List<Director> directors = new List<Director>();
+    string imageDataFile;
+
+    protected async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        var imageFile = e.GetMultipleFiles();
+        var format = "image/jpeg";
+        var resizedImageFile = await imageFile.FirstOrDefault().RequestImageFileAsync(format, 300, 300);
+        var buffer = new byte[resizedImageFile.Size];
+        await resizedImageFile.OpenReadStream().ReadAsync(buffer);
+        var imageDataFileRaw = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+        imageDataFile = imageDataFileRaw;
+
+        movie.FileData = Encoding.ASCII.GetBytes(imageDataFileRaw);
+        movie.Filename = resizedImageFile.Name;
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -77,6 +102,7 @@
     protected async Task CreateMovie()
     {
         await movieService.Create(movie);
+        //  await fileService.Create(imageDataFiles);
         navigationManager.NavigateTo("/movies");
     }
 

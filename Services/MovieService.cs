@@ -18,11 +18,21 @@ namespace ExerciseProject.Services
             _configuration = configuration;
             _dapperService = dapperService;
         }
-
-        public Task<int> Create(Movie movie)
-        {           
+        public Guid? CreatePoster(MovieView movie)
+        {
+            Guid? posterId = null;
+            if (movie.FileData != null && movie.FileData.Length > 0)
+            {
+                posterId = (Guid)_dapperService.Insert<Guid>($"INSERT INTO [dbo].[UploadedFile]([Filename], [FileData]) OUTPUT inserted.IdFile VALUES('{movie.Filename}', CONVERT(VARBINARY(MAX), '{movie.FileData}', 0))",
+                   commandType: CommandType.Text);
+            }
+            return posterId;
+        }
+        public Task<int> Create(MovieView movie)
+        {
+            var posterId = CreatePoster(movie);
             var movieId = Task.FromResult
-   (_dapperService.Insert<int>($"INSERT INTO [dbo].[Movie] ([Title] ,[YearOfProduction] ,[OriginalSoundtrack] ,[Genre] ,[DirectorID] ,[Description] ,[OtherTitles] ,[CreatedAt] ,[PosterId]) VALUES ('{movie.Title}',{movie.YearOfProduction},'{movie.OriginalSoundtrack}','{movie.Genre}',CAST('{movie.DirectorID}' AS UNIQUEIDENTIFIER),'{movie.Description}','{movie.OtherTitles}','{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}', NULL);",
+   (_dapperService.Insert<int>($"INSERT INTO [dbo].[Movie] ([Title] ,[YearOfProduction] ,[OriginalSoundtrack] ,[Genre] ,[DirectorID] ,[Description] ,[OtherTitles] ,[CreatedAt] ,[PosterId]) VALUES ('{movie.Title}',{movie.YearOfProduction},'{movie.OriginalSoundtrack}','{movie.Genre}',CAST('{movie.DirectorID}' AS UNIQUEIDENTIFIER),'{movie.Description}','{movie.OtherTitles}','{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}', TRY_CAST('{posterId}' AS UNIQUEIDENTIFIER));",
     commandType: CommandType.Text));
             return movieId;
         }

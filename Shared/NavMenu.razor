@@ -10,26 +10,64 @@
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="search">
                 <span class="oi oi-zoom-in" aria-hidden="true">
-                    </span> Search engine
+                </span> Search engine
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="movies">
+            <NavLink class="nav-link" @onclick="() => expandSubMenu = !expandSubMenu">
                 <span class="oi oi-media-play" aria-hidden="true">
                 </span> Movies
             </NavLink>
+            @if (expandSubMenu)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="/movies">
+                            <span class="oi oi-media-play" aria-hidden="true">
+                            </span> View movies
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="/addMovie">
+                            <span class="oi oi-media-play" aria-hidden="true">
+                            </span> Add movie
+                        </NavLink>
+                    </li>
+                </ul>
+            }
         </li>
+
+
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="directors">
+            <NavLink class="nav-link" @onclick="() => expandSubMenu2 = !expandSubMenu2">
                 <span class="oi oi-person" aria-hidden="true">
                 </span> Directors
             </NavLink>
+            @if (expandSubMenu2)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="/directors">
+                            <span class="oi oi-media-play" aria-hidden="true">
+                            </span> View directors
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="/addDirector">
+                            <span class="oi oi-media-play" aria-hidden="true">
+                            </span> Add director
+                        </NavLink>
+                    </li>
+                </ul>
+            }
         </li>
     </ul>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
+    private bool expandSubMenu;
+    private bool expandSubMenu2;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 

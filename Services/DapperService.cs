@@ -45,6 +45,7 @@ namespace ExerciseProject.Services
             T result;
             using IDbConnection db = new SqlConnection
                (_config.GetConnectionString("DefaultConnection"));
+            IDbCommand command = db.CreateCommand();
             try
             {
                 if (db.State == ConnectionState.Closed)

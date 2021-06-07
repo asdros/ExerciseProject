@@ -7,50 +7,21 @@ namespace ExerciseProject.Models
     public class Subtitles
     {
         [Key]
-        public Guid ID { get; protected set; }
+        public Guid ID { get; set; }
         [Required]
-        public string Title { get; protected set; }
-        public string Description { get; protected set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
         [Required]
-        public string Language { get; protected set; }
+        public string Language { get; set; }
         [Required]
         [ForeignKey("Movie")]
-        public Guid MovieID { get; protected set; }
+        public Guid MovieID { get; set; }
         [Required]
-        public DateTime AddedOn { get; protected set; }
-        public UploadFile SubtitlesFileName { get; protected set; }
+        public DateTime AddedOn { get; set; }
+        [ForeignKey("File")]
+        public Guid SubtitlesFile { get; set; }
 
         public virtual Movie Movie { get; set; }
 
-
-        public Subtitles(Guid subtitlesID, string title, string description, string language, Guid movieID, string subtitlesFileFormat, string subtitlesFileName)
-        {
-            ID = subtitlesID;
-            SetTitle(title);
-            SetDescription(description);
-            // todo enum set
-            MovieID = movieID;
-            // todo save object model from second table
-        }
-
-        private void SetTitle(string title)
-        {
-            if (string.IsNullOrEmpty(title))
-            {
-                throw new Exception("Title can not be empty.");
-            }
-
-            Title = title;
-        }
-
-        private void SetDescription(string description)
-        {
-            if (string.IsNullOrEmpty(description))
-            {
-                throw new Exception("Title can not be empty.");
-            }
-
-            Description = description;
-        }
     }
 }

@@ -3,11 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ExerciseProject.Models
 {
-    public class UploadFile
+    public class UploadedFile 
     {
         [Key]
         public Guid ID { get; set; }
         [Required]
-        public string FileName { get; set; }
+        public string Filename { get; set; }
+        [Required]
+        public byte[] FileData { get; set; }
     }
 }
