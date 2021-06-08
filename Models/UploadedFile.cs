@@ -10,6 +10,6 @@ namespace ExerciseProject.Models
         [Required]
         public string Filename { get; set; }
         [Required]
-        public byte[] FileData { get; set; }
+        public string FileData { get; set; }
     }
 }

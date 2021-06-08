@@ -20,8 +20,5 @@ namespace ExerciseProject.Models
         public DateTime AddedOn { get; set; }
         [ForeignKey("File")]
         public Guid SubtitlesFile { get; set; }
-
-        public virtual Movie Movie { get; set; }
-
     }
 }

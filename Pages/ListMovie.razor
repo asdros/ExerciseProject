@@ -101,8 +101,14 @@ else
                         <td>@movie.OtherTitles</td>
                         <td>@movie.CreatedAt</td>
                         <td>
+                            <a class="btn btn-info btn-sm"
+                               href='/viewMovie/@movie.ID'>
+                                View
+                            </a>
                             <a class="btn btn-primary btn-sm"
-                               href='/editMovie/@movie.ID'>Edit</a>
+                               href='/editMovie/@movie.ID'>
+                                Edit
+                            </a>
                             󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" @onclick="() => DeleteMovie(movie.ID)">
                                 Delete
                             </a>

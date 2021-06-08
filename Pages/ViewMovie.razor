@@ -1,5 +1,55 @@
-﻿<h3>ViewMovie</h3>
+﻿@page "/viewMovie/{Id:guid}"
+@inject IMovieService movieService
+@inject IDirectorService directorService
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+
+<div class="container">
+    <br />
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <h2>Title: @movie.Title</h2>
+            @if (!(String.IsNullOrEmpty(movie.OtherTitles)))
+            {
+                <h4>Other titles: @movie.OtherTitles</h4>
+            }
+            <br />
+        </div>
+        <div class="col-md-6">
+            <img src="@movie.FileData" alt="@movie.Filename"/>
+            <br />
+        </div>
+    </div>
+    <br /><br />
+    <div class="row">
+        <div class="col-md-5">
+            DUPA
+        </div>
+        <div class="col-md-6" style="background-color: #c1c944; border:inset">
+            <h3> Movie details:</h3>
+            <b>Director: </b>@movie.Firstname @movie.Surname<br />
+            <b>Year of production: </b>@movie.YearOfProduction<br />
+            <b>Original soundtrack: </b>@movie.OriginalSoundtrack<br />
+            <b>Genre: </b>@movie.Genre<br />
+        </div>
+    </div>
+    <div class="row">
+        <h4>Description: </h4><br />
+        <p>@movie.Description</p>
+    </div>
+</div>
 
 @code {
 
+    [Parameter]
+    public Guid Id { get; set; }
+
+    MovieView movie = new MovieView();
+    Director director = new Director();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        director = await directorService.GetById(movie.DirectorID);
+        movie = await movieService.GetById(Id);
+    }
 }

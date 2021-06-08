@@ -37,11 +37,11 @@ namespace ExerciseProject.Services
             return movieId;
         }
 
-        public Task<Movie> GetById(Guid id)
+        public Task<MovieView> GetById(Guid id)
         {
             var movie = Task.FromResult
-               (_dapperService.Get<Movie>
-               ($"select * from [Movie] where Id = CAST('{id}' AS UNIQUEIDENTIFIER)",
+               (_dapperService.Get<MovieView>
+               ($"SELECT [Movie].*, [Director].[Firstname], [Director].[Surname], [UploadedFile].[Filename], [UploadedFile].[FileData] FROM [Movie] LEFT OUTER JOIN [Director] ON [Movie].[DirectorID] = [Director].[Id] LEFT OUTER JOIN [UploadedFile] ON [Movie].[PosterId] = [UploadedFile].[IdFile]WHERE [Movie].[Id] = CAST('{id}' AS UNIQUEIDENTIFIER)",
                commandType: CommandType.Text));
             return movie;
         }

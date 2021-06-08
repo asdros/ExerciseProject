@@ -73,8 +73,6 @@
     </div>
 </div>
 
-
-
 @code {
     MovieView movie = new MovieView();
     List<Director> directors = new List<Director>();
@@ -90,7 +88,7 @@
         var imageDataFileRaw = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
         imageDataFile = imageDataFileRaw;
 
-        movie.FileData = Encoding.ASCII.GetBytes(imageDataFileRaw);
+        movie.FileData = imageDataFileRaw;
         movie.Filename = resizedImageFile.Name;
     }
 
