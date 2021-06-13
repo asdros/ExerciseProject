@@ -22,7 +22,7 @@ namespace ExerciseProject.Services
         public Task<int> Count(string search)
         {
             var directorCount = Task.FromResult(_dapperService.Get<int>
-                          ($"select COUNT(*) from [Director] WHERE Surname like '%{search}%'",
+                          ($"select COUNT(*) from [Director] WHERE Firstname LIKE '%{search}%' OR Surname LIKE '%{search}%'",
                           commandType: CommandType.Text));
             return directorCount;
         }
@@ -66,7 +66,7 @@ namespace ExerciseProject.Services
         {
             var directors = Task.FromResult
                (_dapperService.GetAll<Director>
-               ($"SELECT * FROM [Director] WHERE Firstname like '%{search}%' or Surname like '%{search}%' ORDER BY {orderBy} {direction} " +
+               ($"SELECT * FROM [Director] WHERE Firstname like '%{search}%' OR Surname LIKE '%{search}%' ORDER BY {orderBy} {direction} " +
                $"OFFSET {skip} ROWS FETCH NEXT {take} ROWS ONLY; ", commandType: CommandType.Text));
             return directors;
         }

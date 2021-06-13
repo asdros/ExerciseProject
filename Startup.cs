@@ -26,6 +26,7 @@ namespace ExerciseProject
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IDirectorService, DirectorService>();
+            services.AddScoped<ISubtitlesService, SubtitlesService>();
             services.AddScoped<IDapperService, DapperService>();
             services.AddRazorPages();
             services.AddServerSideBlazor();

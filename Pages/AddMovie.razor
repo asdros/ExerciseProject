@@ -22,6 +22,7 @@
                     <label for="OriginalSoundtrack">Original soundtrack</label>
                     <br />
                     <select class="custom-select" form="OriginalSoundtrack" @bind="movie.OriginalSoundtrack">
+                        <option selected="selected">Select a language</option>
                         @foreach (var language in Enum.GetValues(typeof(Soundtrack)))
                         {
                             <option value="@language">@language</option>
@@ -32,6 +33,7 @@
                     <label for="Genre">Genre</label>
                     <br />
                     <select class="custom-select" form="Genre" @bind="movie.Genre">
+                        <option selected="selected">Select a genre</option>
                         @foreach (var gender in Enum.GetValues(typeof(Genre)))
                         {
                             <option value="@gender">@gender</option>
@@ -43,8 +45,9 @@
                     <label for="DirectorID">Director</label>
                     <br />
                     <select class="custom-select" form="DirectorID" @bind="movie.DirectorID">
+                        <option selected="selected">Select a director</option>
                         @foreach (var director in directors)
-                        {
+                        { 
                             <option value="@director.ID">@director.Firstname  @director.Surname</option>
                         }
                     </select>
@@ -71,6 +74,8 @@
     <div class="col-md-5">
         <img src="@imageDataFile" />
     </div>
+    <br />
+    <br />
 </div>
 
 @code {
@@ -80,9 +85,9 @@
 
     protected async Task LoadFile(InputFileChangeEventArgs e)
     {
-        var imageFile = e.GetMultipleFiles();
+        var imageFile = e.File;
         var format = "image/jpeg";
-        var resizedImageFile = await imageFile.FirstOrDefault().RequestImageFileAsync(format, 300, 300);
+        var resizedImageFile = await imageFile.RequestImageFileAsync(format, 300, 300);
         var buffer = new byte[resizedImageFile.Size];
         await resizedImageFile.OpenReadStream().ReadAsync(buffer);
         var imageDataFileRaw = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
@@ -100,7 +105,6 @@
     protected async Task CreateMovie()
     {
         await movieService.Create(movie);
-        //  await fileService.Create(imageDataFiles);
         navigationManager.NavigateTo("/movies");
     }
 

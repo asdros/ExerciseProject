@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ExerciseProject.Models
 {
-    public class UploadedFile 
+    public class UploadedFile
     {
         [Key]
         public Guid ID { get; set; }
