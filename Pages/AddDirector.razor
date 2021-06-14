@@ -1,44 +1,36 @@
 ﻿@page "/addDirector"
 @inject IDirectorService directorService
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
-@inject ILogger Logger
 
 <h3>Add Director</h3>
 
 <div class="row">
     <div class="col-md-4">
-        <EditForm Model="@director" OnValidSubmit="@HandleValidSubmit">
+            <EditForm Model="@director">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="form-group">
                 <label for="Firstname">Firstname</label>
-                <input form="Firstname" class="form-control"
-                       @bind-value="@director.Firstname" />
+                <InputText form="Firstname" class="form-control" maxlength="50"
+                       @bind-Value="@director.Firstname" />
+                <ValidationMessage For="@(() => director.Firstname)" />
                 <br />
                 <label for="Surname">Surname</label>
-                <input form="Surname" class="form-control"
-                       @bind-value="@director.Surname" />
+                <InputText form="Surname" class="form-control" maxlength="50"
+                       @bind-Value="@director.Surname" />
+                <ValidationMessage For="@(() => director.Surname)" />
                 <br />
             </div>
             <div class="form-group">
-                @*<button type="button" class="btn btn-primary" @onclick="() => CreateDirector()">Save</button>*@
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-primary" @onclick="() => CreateDirector()">Save</button>
                 <button type="button" class="btn btn-warning" @onclick="() => Cancel()">Cancel</button>
             </div>
         </EditForm>
     </div>
 </div>
 
-
-
 @code {
     Director director = new Director();
-
-    private void HandleValidSubmit()
-    {
-        Logger.LogInformation("HandleValidSubmit called");
-        CreateDirector();
-    }
 
     protected async Task CreateDirector()
     {

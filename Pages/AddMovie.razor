@@ -7,68 +7,78 @@
 <h3>Add Movie</h3>
 <div class="row">
     <div class="col-md-4">
-        <form>
+        <EditForm Model="@movie">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
             <div class="form-group">
-                    <label for="Title">Title</label>
-                    <input form="Title" class="form-control"
-                           @bind-value="@movie.Title" />
-                    <br />
-                    <label for="YearOfProduction">Year of production</label>
-                    <input form="YearOfProduction" class="form-control" placeholder="2000"
-                           @bind-value="@movie.YearOfProduction" />
-                    <br />
+                <label for="Title">Title</label>
+                <InputText form="Title" class="form-control" maxlength="200"
+                           @bind-Value="@movie.Title" />
+                <ValidationMessage For="@(() => movie.Title)" />
+                <br />
+                <label for="YearOfProduction">Year of production</label>
+                <InputNumber form="YearOfProduction" class="form-control" placeholder="2000"
+                             min="1900" max="2100" onKeyDown="if(this.value.length==4) return false;"
+                             @bind-Value="@movie.YearOfProduction" />
+                <ValidationMessage For="@(() => movie.YearOfProduction)" />
+                <br />
                 <div class="row">
                     <div class="col">
-                    <label for="OriginalSoundtrack">Original soundtrack</label>
-                    <br />
-                    <select class="custom-select" form="OriginalSoundtrack" @bind="movie.OriginalSoundtrack">
-                        <option selected="selected">Select a language</option>
-                        @foreach (var language in Enum.GetValues(typeof(Soundtrack)))
-                        {
-                            <option value="@language">@language</option>
-                        }
-                    </select>
-                        </div>
-                    <div class="col">
-                    <label for="Genre">Genre</label>
-                    <br />
-                    <select class="custom-select" form="Genre" @bind="movie.Genre">
-                        <option selected="selected">Select a genre</option>
-                        @foreach (var gender in Enum.GetValues(typeof(Genre)))
-                        {
-                            <option value="@gender">@gender</option>
-                        }
-                    </select>
-                        </div>
+                        <label for="OriginalSoundtrack">Original soundtrack</label>
+                        <br />
+                        <InputSelect class="custom-select" form="OriginalSoundtrack" @bind-Value="movie.OriginalSoundtrack">
+                            <option selected="selected">Select a language</option>
+                            @foreach (var language in Enum.GetValues(typeof(Soundtrack)))
+                            {
+                                <option value="@language">@language</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => movie.OriginalSoundtrack)" />
                     </div>
-                    <br />
-                    <label for="DirectorID">Director</label>
-                    <br />
-                    <select class="custom-select" form="DirectorID" @bind="movie.DirectorID">
-                        @foreach (var director in directors)
-                        { 
-                            <option value="@director.ID">@director.Firstname  @director.Surname</option>
-                        }
-                    </select>
-                    <br />
-                    <br />
-                    <label for="Description">Description</label>
-                    <textarea form="Description" class="form-control"
-                              @bind="@movie.Description"></textarea>
-                    <br />
-                    <label for="OtherTitles">Other titles</label>
-                    <input form="OtherTitles" class="form-control"
-                           @bind-value="@movie.OtherTitles" />
-                    <br />
-                    <label for="Image">Image</label>
-                    <InputFile OnChange="LoadFile" bind-value="@movie.FileData" />
+                    <div class="col">
+                        <label for="Genre">Genre</label>
+                        <br />
+                        <InputSelect class="custom-select" form="Genre" @bind-Value="movie.Genre">
+                            <option selected="selected">Select a genre</option>
+                            @foreach (var gender in Enum.GetValues(typeof(Genre)))
+                            {
+                                <option value="@gender">@gender</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => movie.Genre)" />
+                    </div>
                 </div>
-                <hr />
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary" @onclick="() => CreateMovie()">Save</button>
-                    <button type="button" class="btn btn-warning" @onclick="() => Cancel()">Cancel</button>
-                </div>
-        </form>
+                <br />
+                <label for="DirectorID">Director</label>
+                <br />
+                <InputSelect class="custom-select" form="DirectorID" @bind-Value="movie.DirectorID">
+                    @foreach (var director in directors)
+                    {
+                        <option value="@director.ID">@director.Firstname  @director.Surname</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => movie.DirectorID)" />
+                <br />
+                <br />
+                <label for="Description">Description</label>
+                <InputTextArea form="Description" class="form-control" maxlength="2000"
+                               @bind-Value="@movie.Description"></InputTextArea>
+                <ValidationMessage For="@(() => movie.Description)" />
+                <br />
+                <label for="OtherTitles">Other titles</label>
+                <InputText form="OtherTitles" class="form-control" maxlength="100"
+                           @bind-Value="@movie.OtherTitles" />
+                <ValidationMessage For="@(() => movie.OtherTitles)" />
+                <br />
+                <label for="Image">Image</label>
+                <InputFile OnChange="LoadFile" bind-value="@movie.FileData" />
+            </div>
+            <hr />
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" @onclick="() => CreateMovie()">Save</button>
+                <button type="button" class="btn btn-warning" @onclick="() => Cancel()">Cancel</button>
+            </div>
+        </EditForm>
     </div>
     <div class="col-md-5">
         <img src="@imageDataFile" />

@@ -120,27 +120,32 @@
                 <!-- Modal body -->
                 <div class="modal-body">
                     <div class="col-md-12">
-                        <form>
+                        <EditForm Model="@subtitlesFile">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
                             <div class="form-group">
                                 <label for="Title">Title</label>
-                                <input form="Title" class="form-control"
-                                       @bind-value="@subtitlesFile.Title" />
+                                <InputText form="Title" class="form-control" maxlength="100"
+                                           @bind-value="@subtitlesFile.Title" />
+                                <ValidationMessage For="@(() => subtitlesFile.Title)" />
                                 <br />
                                 <label for="Description">Description</label>
-                                <input form="Description" class="form-control"
+                                <input form="Description" class="form-control" maxlength="500"
                                        @bind-value="@subtitlesFile.Description" />
+                                <ValidationMessage For="@(() => subtitlesFile.Description)" />
                                 <br />
                                 <div class="row">
                                     <div class="col">
                                         <label for="Language">Language</label>
                                         <br />
-                                        <select class="custom-select" form="Language" @bind="subtitlesFile.Language">
+                                        <InputSelect class="custom-select" form="Language" @bind-Value="subtitlesFile.Language">
                                             <option selected="selected">Select a language</option>
                                             @foreach (var language in Enum.GetValues(typeof(Soundtrack)))
-                                            {
+                                                {
                                                 <option value="@language">@language</option>
-                                            }
-                                        </select>
+                                                }
+                                        </InputSelect>
+                                        <ValidationMessage For="@(() => subtitlesFile.Language)" />
                                     </div>
                                 </div>
                                 <br />
@@ -149,7 +154,7 @@
                                 <InputFile OnChange="LoadFile" />
                             </div>
                             <hr />
-                        </form>
+                        </EditForm>
                     </div>
                 </div>
 
