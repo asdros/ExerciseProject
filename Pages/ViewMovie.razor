@@ -60,6 +60,8 @@
                    @bind:event="oninput" />
         </div>
     </div>
+    <br />
+    <br />
     <div class="row">
         <table class="table table-bordered table-hover">
             <thead>
@@ -82,23 +84,25 @@
                 {
                     foreach (var subtitlesFile in subtitlesFiles)
                     {
-            <tr>
-                <td>@subtitlesFile.Title</td>
-                <td>@subtitlesFile.Language</td>
-                <td>@subtitlesFile.Description</td>
-                <td>@subtitlesFile.Filename.Trim()</td>
-                <td>
-                    <a class="btn btn-primary btn-sm" @onclick="() => DeleteFile(subtitlesFile.ID)">Delete</a>
-                    󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" @onclick="() => DownloadFile(subtitlesFile.SubtitlesFileId)">
-                        Download
-                    </a>
-                </td>
-            </tr>
+                        <tr>
+                            <td>@subtitlesFile.Title</td>
+                            <td>@subtitlesFile.Language</td>
+                            <td>@subtitlesFile.Description</td>
+                            <td>@subtitlesFile.Filename</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" @onclick="() => DeleteFile(subtitlesFile.ID)">Delete</a>
+                                󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" href="~/Saved Sub Files/"
+                                           download="@subtitlesFile.Filename.Substring(0, subtitlesFile.Filename.IndexOf("--"))" target="_top">
+                                    Download</a>
+                            </td>
+                        </tr>
                     }
                 }
             </tbody>
         </table>
     </div>
+    <br />
+    <br />
 </div>
 
 @if (showModal)
@@ -227,7 +231,7 @@
         subtitlesFile.MovieID = movie.ID;
         await subtitlesService.Create(subtitlesFile);
         ModalCancel();
-        navigationManager.NavigateTo($"/viewMovie/{movie.ID}");
+        subtitlesFiles = await subtitlesService.ListByMovieId(movie.ID, (curPage - 1) * pageSize, pageSize, sortColumnName, sortDir, searchTerm);
     }
 
     protected async Task LoadFile(InputFileChangeEventArgs e)
@@ -240,19 +244,14 @@
         stream.Close();
         fs.Close();
 
-        subtitlesFile.Filename = string.Join(" ",subFile.Name, DateTime.UtcNow);
+        subtitlesFile.Filename = string.Join("--", subFile.Name, DateTime.UtcNow);
     }
 
     protected async Task DeleteFile(Guid subFileId)
     {
         await subtitlesService.Delete(subFileId);
-        subtitlesFiles = await subtitlesService.ListByMovieId(movie.ID,(curPage - 1)
+        subtitlesFiles = await subtitlesService.ListByMovieId(movie.ID, (curPage - 1)
 * pageSize, pageSize, sortColumnName, sortDir, searchTerm);
-    }
-
-    protected async Task DownloadFile(Guid id)
-    {
-
     }
 
     public async Task refreshRecords(int currentPage)

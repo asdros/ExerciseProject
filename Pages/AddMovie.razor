@@ -45,7 +45,6 @@
                     <label for="DirectorID">Director</label>
                     <br />
                     <select class="custom-select" form="DirectorID" @bind="movie.DirectorID">
-                        <option selected="selected">Select a director</option>
                         @foreach (var director in directors)
                         { 
                             <option value="@director.ID">@director.Firstname  @director.Surname</option>

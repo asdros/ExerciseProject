@@ -41,7 +41,7 @@ namespace ExerciseProject.Services
             Guid? subtitlesFileId = null;
             if (subtitles.Filename != null && subtitles.Filename.Length > 0)
             {
-                subtitlesFileId = (Guid)_dapperService.Insert<Guid>($"INSERT INTO [dbo].[UploadedFile]([Filename], [FileData]) OUTPUT inserted.IdFile VALUES('{subtitles.Filename}', 0))",
+                subtitlesFileId = (Guid)_dapperService.Insert<Guid>($"INSERT INTO [dbo].[UploadedFile]([Filename], [FileData]) OUTPUT inserted.IdFile VALUES('{subtitles.Filename}', 0)",
                    commandType: CommandType.Text);
             }
             return subtitlesFileId;
