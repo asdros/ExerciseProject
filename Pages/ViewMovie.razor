@@ -118,9 +118,9 @@
                 </div>
 
                 <!-- Modal body -->
-                <div class="modal-body">
-                    <div class="col-md-12">
-                        <EditForm Model="@subtitlesFile" OnValidSubmit="CreateSubtitles" OnInvalidSubmit="InvalidFormSubmitted">
+                <EditForm Model="@subtitlesFile" OnValidSubmit="CreateSubtitles" OnInvalidSubmit="InvalidFormSubmitted">
+                    <div class="modal-body">
+                        <div class="col-md-12">
                             <DataAnnotationsValidator />
                             <ValidationSummary />
                             <div class="form-group">
@@ -131,7 +131,7 @@
                                 <br />
                                 <label for="Description">Description</label>
                                 <InputTextArea form="Description" class="form-control" maxlength="500"
-                                       @bind-Value="@subtitlesFile.Description" />
+                                               @bind-Value="@subtitlesFile.Description" />
                                 <ValidationMessage For="@(() => subtitlesFile.Description)" />
                                 <br />
                                 <div class="row">
@@ -154,16 +154,15 @@
                                 <InputFile OnChange="LoadFile" />
                             </div>
                             <hr />
-                        </EditForm>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <input type="submit" class="btn btn-primary" value="Save" />
-                    <button type="button" class="btn btn-warning" @onclick="@ModalCancel">Close</button>
-                </div>
-
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary" value="Save" />
+                        <button type="button" class="btn btn-warning" @onclick="@ModalCancel">Close</button>
+                    </div>
+                </EditForm>
             </div>
         </div>
     </div>
