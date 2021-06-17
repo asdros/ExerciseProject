@@ -3,64 +3,90 @@
 @inject IDirectorService directorService
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 
-
+<title>Edit Movie</title>
 <h3>Edit Movie</h3>
 
 <div class="row">
     <div class="col-md-4">
-        <form>
+        <EditForm Model="@movie" OnValidSubmit="UpdateMovie" OnInvalidSubmit="InvalidFormSubmitted">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
             <div class="form-group">
                 <label for="Title">Title</label>
-                <input form="Title" class="form-control" @bind-value="@movie.Title" />
+                <InputText form="Title" class="form-control" maxlength="200"
+                           @bind-Value="@movie.Title" />
+                <ValidationMessage For="@(() => movie.Title)" />
                 <br />
                 <label for="YearOfProduction">Year of production</label>
-                <input form="YearOfProduction" class="form-control"
-                       @bind-value="@movie.YearOfProduction" />
+                <InputNumber form="YearOfProduction" class="form-control" placeholder="2000"
+                             min="1900" max="2100" onKeyDown="if(this.value.length==4) return false;"
+                             @bind-Value="@movie.YearOfProduction" />
+                <ValidationMessage For="@(() => movie.YearOfProduction)" />
                 <br />
                 <label for="OriginalSoundtrack">Original soundtrack</label>
                 <br />
-                <select form="OriginalSoundtrack" @bind="movie.OriginalSoundtrack" style="width:200px">
+                <InputSelect form="OriginalSoundtrack" class="custom-select"
+                             @bind-Value="@movie.OriginalSoundtrack">
                     @foreach (var language in Enum.GetValues(typeof(Soundtrack)))
                     {
                         <option value="@language">@language</option>
                     }
-                </select>
+                </InputSelect>
+                <ValidationMessage For="@(() => movie.OriginalSoundtrack)" />
                 <br />
                 <br />
                 <label for="Genre">Genre</label>
                 <br />
-                <select form="Genre" @bind="@movie.Genre" style="width:200px">
+                <InputSelect form="Genre" class="custom-select"
+                             @bind-Value="@movie.Genre">
                     @foreach (var gender in Enum.GetValues(typeof(Genre)))
                     {
                         <option value="@gender">@gender</option>
                     }
-                </select>
+                </InputSelect>
+                <ValidationMessage For="@(() => movie.Genre)" />
                 <br />
                 <br />
                 <label for="DirectorID">Director</label>
                 <br />
-                <select form="DirectorID" @bind="movie.DirectorID" style="width:200px">
+                <InputSelect form="DirectorID" class="custom-select" @bind-Value="@movie.DirectorID">
                     @foreach (var director in directors)
                     {
                         <option value="@director.ID">@director.Firstname  @director.Surname</option>
                     }
-                </select>
+                </InputSelect>
+                <ValidationMessage For="@(() => movie.DirectorID)" />
                 <br />
                 <br />
                 <label for="Description">Description</label>
-                <textarea form="Description" class="form-control"
-                          @bind="@movie.Description">
-                </textarea>
+                <InputTextArea form="Description" class="form-control" maxlength="2000"
+                               @bind-Value="@movie.Description">
+                </InputTextArea>
+                <ValidationMessage For="@(() => movie.Description)" />
                 <br />
                 <label for="OtherTitles">Other titles</label>
-                <input form="OtherTitles" class="form-control"
-                       @bind-value="@movie.OtherTitles" />
+                <InputText form="OtherTitles" class="form-control" maxlength="100"
+                           @bind-Value="@movie.OtherTitles" />
+                <ValidationMessage For="@(() => movie.OtherTitles)" />
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-primary" @onclick="() => UpdateMovie()">Save</button>
+                <input type="submit" class="btn btn-primary" value="Save" />
                 <button type="button" class="btn btn-warning" @onclick="() => Cancel()">Cancel</button>
             </div>
-        </form>
+        </EditForm>
+    </div>
+    <div class="col-md-5">
+        <img src="@movie.FileData" />
+        <br />
+        <br />
+        @if (movie.PosterID.HasValue)
+        {
+            <button type="button" class="btn btn-danger" @onclick="() => DeletePoster(movie.PosterID)">Delete Poster</button>
+        }
+        else
+        {
+            <img src="@imageToDisplay" />
+        }
     </div>
 </div>
 
@@ -70,8 +96,9 @@
 
     [Parameter]
     public Guid Id { get; set; }
+    string imageToDisplay;
 
-    Movie movie = new Movie();
+    MovieView movie = new MovieView();
     List<Director> directors = new List<Director>();
 
 
@@ -87,8 +114,39 @@
         navigationManager.NavigateTo("/movies");
     }
 
+    protected async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        var imageFile = e.File;
+        var format = "image/jpeg";
+        var resizedImageFile = await imageFile.RequestImageFileAsync(format, 300, 300);
+        var buffer = new byte[resizedImageFile.Size];
+        await resizedImageFile.OpenReadStream().ReadAsync(buffer);
+        var imageDataFileRaw = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+        imageToDisplay = imageDataFileRaw;
+
+        ImageAssignment(imageDataFileRaw, resizedImageFile.Name);
+    }
+
+    protected void ImageAssignment(string imageBase64, string filename)
+    {
+        movie.FileData = imageBase64;
+        movie.Filename = filename;
+    }
+
+    protected async Task DeletePoster(Guid? id)
+    {
+        await movieService.DeletePoster(id);
+        navigationManager.NavigateTo($"/editMovie/{movie.ID}");
+    }
+
     protected void Cancel()
     {
         navigationManager.NavigateTo("/movies");
+    }
+
+    protected void InvalidFormSubmitted()
+    {
+        navigationManager.NavigateTo($"/editMovie/{movie.ID}");
+
     }
 }

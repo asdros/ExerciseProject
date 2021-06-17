@@ -5,9 +5,10 @@
 
 <title>Add Movie</title>
 <h3>Add Movie</h3>
+
 <div class="row">
     <div class="col-md-4">
-        <EditForm Model="@movie">
+        <EditForm Model="@movie" OnValidSubmit="CreateMovie" OnInvalidSubmit="InvalidFormSubmitted">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="form-group">
@@ -75,13 +76,13 @@
             </div>
             <hr />
             <div class="form-group">
-                <button type="button" class="btn btn-primary" @onclick="() => CreateMovie()">Save</button>
+                <input type="submit" class="btn btn-primary" value="Save" />
                 <button type="button" class="btn btn-warning" @onclick="() => Cancel()">Cancel</button>
             </div>
         </EditForm>
     </div>
     <div class="col-md-5">
-        <img src="@imageDataFile" />
+        <img src="@imageToDisplay" />
     </div>
     <br />
     <br />
@@ -90,7 +91,7 @@
 @code {
     MovieView movie = new MovieView();
     List<Director> directors = new List<Director>();
-    string imageDataFile;
+    string imageToDisplay;
 
     protected async Task LoadFile(InputFileChangeEventArgs e)
     {
@@ -100,10 +101,15 @@
         var buffer = new byte[resizedImageFile.Size];
         await resizedImageFile.OpenReadStream().ReadAsync(buffer);
         var imageDataFileRaw = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
-        imageDataFile = imageDataFileRaw;
+        imageToDisplay = imageDataFileRaw;
 
-        movie.FileData = imageDataFileRaw;
-        movie.Filename = resizedImageFile.Name;
+        ImageAssignment(imageDataFileRaw, resizedImageFile.Name);
+    }
+
+    protected void ImageAssignment(string imageBase64, string filename)
+    {
+        movie.FileData = imageBase64;
+        movie.Filename = filename;
     }
 
     protected override async Task OnInitializedAsync()
@@ -120,5 +126,10 @@
     protected void Cancel()
     {
         navigationManager.NavigateTo("/movies");
+    }
+
+    protected void InvalidFormSubmitted()
+    {
+        navigationManager.NavigateTo("/addMovie");
     }
 }

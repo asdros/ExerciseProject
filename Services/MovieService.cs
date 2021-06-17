@@ -18,7 +18,7 @@ namespace ExerciseProject.Services
             _configuration = configuration;
             _dapperService = dapperService;
         }
-        public Guid? CreatePoster(MovieView movie)
+        private Guid? CreatePoster(MovieView movie)
         {
             Guid? posterId = null;
             if (movie.FileData != null && movie.FileData.Length > 0)
@@ -73,11 +73,21 @@ namespace ExerciseProject.Services
             return movies;
         }
 
-        public Task<int> Update(Movie movie)
+        public Task<int> Update(MovieView movie)
         {
+            var posterId = CreatePoster(movie);
             var updateMovie = Task.FromResult
-               (_dapperService.Update<int>($"UPDATE [dbo].[Movie] SET [Title] = '{movie.Title}', [YearOfProduction] = '{movie.YearOfProduction}', [OriginalSoundtrack] = '{movie.OriginalSoundtrack}', [Genre] = '{movie.Genre}', [DirectorID] = '{movie.DirectorID}', [Description] = '{movie.Description}', [OtherTitles] = '{movie.OtherTitles}', [CreatedAt] = '{DateTime.UtcNow.ToString("yyyy - MM - dd HH: mm:ss")}', [PosterId] = NULL WHERE [Id] = CAST('{movie.ID}' AS UNIQUEIDENTIFIER)", commandType: CommandType.Text)); //todo
+               (_dapperService.Update<int>($"UPDATE [dbo].[Movie] SET [Title] = '{movie.Title}', [YearOfProduction] = '{movie.YearOfProduction}', [OriginalSoundtrack] = '{movie.OriginalSoundtrack}', [Genre] = '{movie.Genre}', [DirectorID] = '{movie.DirectorID}', [Description] = '{movie.Description}', [OtherTitles] = '{movie.OtherTitles}', [CreatedAt] = '{DateTime.UtcNow.ToString("yyyy - MM - dd HH: mm:ss")}', [PosterId] = TRY_CAST('{posterId}' AS UNIQUEIDENTIFIER) WHERE [Id] = CAST('{movie.ID}' AS UNIQUEIDENTIFIER)", commandType: CommandType.Text)); //todo
             return updateMovie;
+        }
+
+        public Task<int> DeletePoster(Guid? id)
+        {
+            var deletePoster = Task.FromResult
+                    (_dapperService.Execute
+                    ($"Delete [UploadedFile] where IdFile = CAST('{id}' AS UNIQUEIDENTIFIER)",
+                    commandType: CommandType.Text));
+            return deletePoster;
         }
     }
 }

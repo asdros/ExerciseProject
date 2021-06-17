@@ -26,6 +26,6 @@ namespace ExerciseProject.Models
         [MinLength(2, ErrorMessage = "Title is too short (2 characters minimum).")]
         public string OtherTitles { get; set; }
         public DateTime CreatedAt { get; set; }
-        public Guid PosterID { get; set; }
+        public Guid? PosterID { get; set; }
     }
 }

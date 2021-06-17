@@ -46,7 +46,6 @@
         <div class="col-md-5">
         </div>
         <div class="col-md-6">
-            @* Modal do dodawania subtitles i uploadu pliku z napisami  *@
             <button type="button" class="btn btn-warning btn-lg" @onclick="@ModalShow">Upload subtitles</button>
         </div>
     </div>
@@ -93,7 +92,8 @@
                                 <a class="btn btn-primary btn-sm" @onclick="() => DeleteFile(subtitlesFile.ID)">Delete</a>
                                 󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" href="~/Saved Sub Files/"
                                            download="@subtitlesFile.Filename.Substring(0, subtitlesFile.Filename.IndexOf("--"))" target="_top">
-                                    Download</a>
+                                    Download
+                                </a>
                             </td>
                         </tr>
                     }
@@ -120,18 +120,18 @@
                 <!-- Modal body -->
                 <div class="modal-body">
                     <div class="col-md-12">
-                        <EditForm Model="@subtitlesFile">
+                        <EditForm Model="@subtitlesFile" OnValidSubmit="CreateSubtitles" OnInvalidSubmit="InvalidFormSubmitted">
                             <DataAnnotationsValidator />
                             <ValidationSummary />
                             <div class="form-group">
                                 <label for="Title">Title</label>
                                 <InputText form="Title" class="form-control" maxlength="100"
-                                           @bind-value="@subtitlesFile.Title" />
+                                           @bind-Value="@subtitlesFile.Title" />
                                 <ValidationMessage For="@(() => subtitlesFile.Title)" />
                                 <br />
                                 <label for="Description">Description</label>
-                                <input form="Description" class="form-control" maxlength="500"
-                                       @bind-value="@subtitlesFile.Description" />
+                                <InputTextArea form="Description" class="form-control" maxlength="500"
+                                       @bind-Value="@subtitlesFile.Description" />
                                 <ValidationMessage For="@(() => subtitlesFile.Description)" />
                                 <br />
                                 <div class="row">
@@ -160,7 +160,7 @@
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" @onclick="() => CreateSubtitles()">Save</button>
+                    <input type="submit" class="btn btn-primary" value="Save" />
                     <button type="button" class="btn btn-warning" @onclick="@ModalCancel">Close</button>
                 </div>
 
@@ -326,5 +326,11 @@
     {
         endPage = 0;
         this.OnInitializedAsync().Wait();
+    }
+
+    protected void InvalidFormSubmitted()
+    {
+        navigationManager.NavigateTo($"/viewMovie/{movie.ID}");
+        showModal = true;
     }
 }
