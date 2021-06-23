@@ -6,6 +6,18 @@ An application builts with Blazor Framework using the client-side hosting model 
 ### Features
 The user can enter the specification of the movie by filling in the form, adding a poster in order to save the record in the database. Then the user add subtitles file with description.
 
+- connecting a web application made in C # technology and using the Blazor framework with an SQL database;
+- connection made using Dapper ORM technology
+- the ability to create, edit, delete and display movie records and the corresponding subtitles, the 'movies' table has a 1: N relationship with the subtitles table;
+- upload of movie posters, which are saved in the database after conversion to a string of base64 type;
+- validation of forms on the backend, where in the case of incorrectly filled fields the correct message is displayed in the frontend;
+- dictionary data (names of film types and languages) contained in the ENUM data structure;
+- pagination of displayed records from the database (division of the list into subpages, possible to switch over);
+- search engine among movie records in terms of two columns in the list of records downloaded from the database;
+- the ability to sort the displayed results by clicking on the column name;
+- subtitles text files are saved on the server after adding a string containing the current date and time to the file name in order to make individual files unique;
+- vertical menu made with collapse (menu sub-elements expand and collapse when clicked with the cursor);
+- layout designed on the basis of Bootstrap grid;
 
 
 #### Screenshots

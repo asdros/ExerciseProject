@@ -68,7 +68,7 @@ namespace ExerciseProject.Services
         {
             var movies = Task.FromResult
                (_dapperService.GetAll<MovieDirector>
-               ($"SELECT [Movie].*, [Director].[Firstname], [Director].[Surname] FROM [Movie] LEFT OUTER JOIN [Director] ON [Movie].[DirectorID] = [Director].[Id] WHERE Title like'%{search}%' ORDER BY {orderBy} {direction} " +
+               ($"SELECT [Movie].*, [Director].[Firstname], [Director].[Surname] FROM [Movie] LEFT OUTER JOIN [Director] ON [Movie].[DirectorID] = [Director].[Id] WHERE Title like'%{search}%' OR [Director].[Surname] like '%{search}%' ORDER BY {orderBy} {direction} " +
                $"OFFSET {skip} ROWS FETCH NEXT {take} ROWS ONLY; ", commandType: CommandType.Text));
             return movies;
         }
