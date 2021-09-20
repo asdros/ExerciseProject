@@ -27,5 +27,6 @@ namespace ExerciseProject.Models
         public string OtherTitles { get; set; }
         public DateTime CreatedAt { get; set; }
         public Guid? PosterID { get; set; }
+        public bool isApproved { get; set; }
     }
 }

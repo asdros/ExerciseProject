@@ -32,7 +32,7 @@ namespace ExerciseProject.Services
         {
             var posterId = CreatePoster(movie);
             var movieId = Task.FromResult
-   (_dapperService.Insert<int>($"INSERT INTO [dbo].[Movie] ([Title] ,[YearOfProduction] ,[OriginalSoundtrack] ,[Genre] ,[DirectorID] ,[Description] ,[OtherTitles] ,[CreatedAt] ,[PosterId]) VALUES ('{movie.Title}',{movie.YearOfProduction},'{movie.OriginalSoundtrack}','{movie.Genre}',CAST('{movie.DirectorID}' AS UNIQUEIDENTIFIER),'{movie.Description}','{movie.OtherTitles}','{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")}', TRY_CAST('{posterId}' AS UNIQUEIDENTIFIER));",
+   (_dapperService.Insert<int>($"INSERT INTO [dbo].[Movie] ([Title] ,[YearOfProduction] ,[OriginalSoundtrack] ,[Genre] ,[DirectorID] ,[Description] ,[OtherTitles] ,[CreatedAt] ,[PosterId]) VALUES ('{movie.Title}',{movie.YearOfProduction},'{movie.OriginalSoundtrack}','{movie.Genre}',CAST('{movie.DirectorID}' AS UNIQUEIDENTIFIER),'{movie.Description}','{movie.OtherTitles}','{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}', TRY_CAST('{posterId}' AS UNIQUEIDENTIFIER));",
     commandType: CommandType.Text));
             return movieId;
         }
@@ -77,7 +77,7 @@ namespace ExerciseProject.Services
         {
             var posterId = CreatePoster(movie);
             var updateMovie = Task.FromResult
-               (_dapperService.Update<int>($"UPDATE [dbo].[Movie] SET [Title] = '{movie.Title}', [YearOfProduction] = '{movie.YearOfProduction}', [OriginalSoundtrack] = '{movie.OriginalSoundtrack}', [Genre] = '{movie.Genre}', [DirectorID] = '{movie.DirectorID}', [Description] = '{movie.Description}', [OtherTitles] = '{movie.OtherTitles}', [CreatedAt] = '{DateTime.UtcNow.ToString("yyyy - MM - dd HH: mm:ss")}', [PosterId] = TRY_CAST('{posterId}' AS UNIQUEIDENTIFIER) WHERE [Id] = CAST('{movie.ID}' AS UNIQUEIDENTIFIER)", commandType: CommandType.Text)); //todo
+               (_dapperService.Update<int>($"UPDATE [dbo].[Movie] SET [Title] = '{movie.Title}', [YearOfProduction] = '{movie.YearOfProduction}', [OriginalSoundtrack] = '{movie.OriginalSoundtrack}', [Genre] = '{movie.Genre}', [DirectorID] = '{movie.DirectorID}', [Description] = '{movie.Description}', [OtherTitles] = '{movie.OtherTitles}', [CreatedAt] = '{DateTime.UtcNow:yyyy - MM - dd HH: mm:ss}', [PosterId] = TRY_CAST('{posterId}' AS UNIQUEIDENTIFIER) WHERE [Id] = CAST('{movie.ID}' AS UNIQUEIDENTIFIER)", commandType: CommandType.Text)); //todo
             return updateMovie;
         }
 
@@ -88,6 +88,14 @@ namespace ExerciseProject.Services
                     ($"Delete [UploadedFile] where IdFile = CAST('{id}' AS UNIQUEIDENTIFIER)",
                     commandType: CommandType.Text));
             return deletePoster;
+        }
+
+        public Task<int> UpdateStatus(Guid id, bool value)
+        {
+            bool newStatus = !value;
+            var movie = Task.FromResult
+                (_dapperService.Update<int>($"UPDATE [dbo].[Movie] SET [isApproved] = '{newStatus}' WHERE [Id] = CAST('{id}' AS UNIQUEIDENTIFIER)"));
+            return movie;
         }
     }
 }

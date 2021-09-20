@@ -1,29 +1,6 @@
 ﻿@page "/directors"
 @inject IDirectorService directorService
 
-<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0
-/css/font-awesome.min.css" rel="stylesheet">
-
-<style>
-    .sort-th {
-        cursor: pointer;
-    }
-
-    .fa {
-        float: right;
-    }
-
-    .btn-custom {
-        color: black;
-        float: left;
-        padding: 8px 16px;
-        text-decoration: none;
-        transition: background-color .3s;
-        border: 2px solid #000;
-        margin: 0px 5px 0px 5px;
-    }
-</style>
-
 <div>
     <a class="btn btn-primary"
        href='/addDirector'>Add new director</a>
@@ -75,11 +52,24 @@ else
                         <td>@director.Firstname</td>
                         <td>@director.Surname</td>
                         <td>
-                            <a class="btn btn-primary btn-sm"
-                               href='/editDirector/@director.ID'>Edit</a>
-                            󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" @onclick="() => DeleteDirector(director.ID)">
-                                Delete
-                            </a>
+                            <AuthorizeView>
+                                <Authorized>
+                                    <a class="btn btn-primary btn-sm" href='/editDirector/@director.ID'>
+                                        Edit
+                                    </a>
+                                    󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" @onclick="() => DeleteDirector(director.ID)">
+                                        Delete
+                                    </a>
+                                </Authorized>
+                                <NotAuthorized>
+                                    <a class="btn btn-primary btn-sm" href='/notAuthorized'>
+                                        Edit
+                                    </a>
+                                    󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" href='/notAuthorized'>
+                                        Delete
+                                    </a>
+                                </NotAuthorized>
+                            </AuthorizeView>
                         </td>
                     </tr>
                 }

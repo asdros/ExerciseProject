@@ -2,29 +2,7 @@
 @page "/"
 @inject IMovieService movieService
 @inject IDirectorService directorService
-
-<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0
-/css/font-awesome.min.css" rel="stylesheet">
-
-<style>
-    .sort-th {
-        cursor: pointer;
-    }
-
-    .fa {
-        float: right;
-    }
-
-    .btn-custom {
-        color: black;
-        float: left;
-        padding: 8px 16px;
-        text-decoration: none;
-        transition: background-color .3s;
-        border: 2px solid #000;
-        margin: 0px 5px 0px 5px;
-    }
-</style>
+@inject NavigationManager navigationManager
 
 <div>
     <a class="btn btn-primary"
@@ -106,13 +84,27 @@ else
                                href='/viewMovie/@movie.ID'>
                                 View
                             </a>
-                            <a class="btn btn-primary btn-sm"
-                               href='/editMovie/@movie.ID'>
-                                Edit
-                            </a>
-                            󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" @onclick="() => DeleteMovie(movie.ID)">
-                                Delete
-                            </a>
+                            <AuthorizeView>
+                                <Authorized>
+                                    <a class="btn btn-primary btn-sm" href='/editMovie/@movie.ID'>
+                                        Edit
+                                    </a>
+                                    󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" @onclick="() => DeleteMovie(movie.ID)">
+                                        Delete
+                                    </a>
+                                    󠀠󠀠󠀠󠀠<a class="btn btn-@(movie.isApproved == true ? "danger" : "info") btn-sm" @onclick="() => MakeVisible(movie.ID, movie.isApproved)">
+                                        @(movie.isApproved == true ? "Is visible" : "Isn't visible")
+                                    </a>
+                                </Authorized>
+                                <NotAuthorized>
+                                    <a class="btn btn-primary btn-sm" href='/notAuthorized'>
+                                        Edit
+                                    </a>
+                                    󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" href='/notAuthorized'>
+                                        Delete
+                                    </a>
+                                </NotAuthorized>
+                            </AuthorizeView>
                         </td>
                     </tr>
                 }
@@ -177,6 +169,12 @@ else
         totalRecords = await movieService.Count(searchTerm);
         totalPages = (int)Math.Ceiling(totalRecords / (decimal)pageSize);
         SetPagerSize("forward");
+    }
+
+    protected async Task MakeVisible(Guid id, bool status)
+    {
+        await movieService.UpdateStatus(id, status);
+        navigationManager.NavigateTo("/movies", true);
     }
 
     protected async Task DeleteMovie(Guid id)

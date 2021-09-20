@@ -16,5 +16,6 @@ namespace ExerciseProject.Interfaces
         Task<int> DeletePoster(Guid? id);
         Task<List<MovieDirector>> ListAll(int skip, int take,
             string orderBy, string direction, string search);
+        Task<int> UpdateStatus(Guid id, bool Status);
     }
 }
