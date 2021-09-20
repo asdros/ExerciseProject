@@ -6,330 +6,338 @@
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 
 <div class="container" style="@blurStyle">
-    <br />
-    <div class="row justify-content-between">
-        <div class="col-md-5">
-            <h2>Title: @movie.Title</h2>
-            @if (!(String.IsNullOrEmpty(movie.OtherTitles)))
-            {
-                <h4>Other titles: @movie.OtherTitles</h4>
-            }
-            <br />
-        </div>
-        <div class="col-md-6">
-            <img src="@movie.FileData" alt="@movie.Filename" />
-            <br />
-        </div>
-    </div>
-    <br />
-    <br />
-    <div class="row justify-content-between">
-        <div class="col-md-5">
-            <h4>Description: </h4><br />
-            <p>@movie.Description</p>
-        </div>
-        <div class="col-md-6">
-            <div class="p-3" style="background-color: #c1c944; border:inset; flex: 0 0 30%;">
-                <h3> Movie details:</h3>
-                <b>Director: </b>@movie.Firstname @movie.Surname<br />
-                <b>Year of production: </b>@movie.YearOfProduction<br />
-                <b>Original soundtrack: </b>@movie.OriginalSoundtrack<br />
-                <b>Genre: </b>@movie.Genre<br />
-            </div>
-        </div>
-        <div class="col-md-2">
-        </div>
-    </div>
-    <br />
-    <br />
-    <div class="row justify-content-between">
-        <div class="col-md-5">
-        </div>
-        <div class="col-md-6">
-            <button type="button" class="btn btn-warning btn-lg" @onclick="@ModalShow">Upload subtitles</button>
-        </div>
-    </div>
-    <br />
-    <br />
-    <div class="row justify-content-between">
-        <div class="row col-md-3 pull-left">
-            <input type="text" id="txtSearch"
-                   placeholder="Search Titles or Director's surname..."
-                   class="form-control" @bind="SearchTerm"
-                   @bind:event="oninput" />
-        </div>
-    </div>
-    <br />
-    <br />
-    <div class="row">
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Language</th>
-                    <th>Description</th>
-                    <th>File name</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (subtitlesFiles == null || subtitlesFiles.Count == 0)
-                {
-                    <tr>
-                        <td colspan="5">No Records to display</td>
-                    </tr>
-                }
-                else
-                {
-                    foreach (var subtitlesFile in subtitlesFiles)
-                    {
-                        <tr>
-                            <td>@subtitlesFile.Title</td>
-                            <td>@subtitlesFile.Language</td>
-                            <td>@subtitlesFile.Description</td>
-                            <td>@subtitlesFile.Filename</td>
-                            <td>
-                                <a class="btn btn-primary btn-sm" @onclick="() => DeleteFile(subtitlesFile.ID)">Delete</a>
-                                󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" href="~/Saved Sub Files/"
-                                           download="@subtitlesFile.Filename.Substring(0, subtitlesFile.Filename.IndexOf("--"))" target="_top">
-                                    Download
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
-    </div>
-    <br />
-    <br />
+	<br />
+	<button type="button" class="btn btn-primary btn-sm" @onclick="@ReturnToPreviousSite">← Back</button>
+	<br />
+	<br />
+	<div class="row justify-content-between">
+		<div class="col-md-5">
+			<h2>Title: @movie.Title</h2>
+			@if (!(String.IsNullOrEmpty(movie.OtherTitles)))
+			{
+	   <h5>@movie.OtherTitles</h5>
+			}
+   <br />
+  </div>
+  <div class="col-md-6">
+   <img src="@movie.FileData" alt="@movie.Filename" />
+   <br />
+  </div>
+ </div>
+ <br />
+ <br />
+ <div class="row justify-content-between">
+  <div class="col-md-5">
+   <h4>Description: </h4><br />
+   <p>@movie.Description</p>
+  </div>
+  <div class="col-md-6">
+   <div class="p-3" style="background-color: #c1c944; border:inset; flex: 0 0 30%;">
+	<h3> Movie details:</h3>
+	<b>Director: </b>@movie.Firstname @movie.Surname<br />
+	<b>Year of production: </b>@movie.YearOfProduction<br />
+	<b>Original soundtrack: </b>@movie.OriginalSoundtrack<br />
+	<b>Genre: </b>@movie.Genre<br />
+   </div>
+  </div>
+  <div class="col-md-2">
+  </div>
+ </div>
+ <br />
+ <br />
+ <div class="row justify-content-between">
+  <div class="col-md-5">
+  </div>
+  <div class="col-md-6">
+   <button type="button" class="btn btn-warning btn-lg" @onclick="@ModalShow">Upload subtitles</button>
+  </div>
+ </div>
+ <br />
+ <br />
+ <div class="row justify-content-between">
+  <div class="row col-md-3 pull-left">
+   <input type="text" id="txtSearch"
+				   placeholder="Search Titles or Director's surname..."
+				   class="form-control" @bind="SearchTerm"
+				   @bind:event="oninput" />
+  </div>
+ </div>
+ <br />
+ <br />
+ <div class="row">
+  <table class="table table-bordered table-hover">
+   <thead>
+	<tr>
+	 <th>Title</th>
+	 <th>Language</th>
+	 <th>Description</th>
+	 <th>File name</th>
+	 <th>Action</th>
+	</tr>
+   </thead>
+   <tbody>
+				@if (subtitlesFiles == null || subtitlesFiles.Count == 0)
+				{
+		<tr>
+		 <td colspan="5">No Records to display</td>
+		</tr>
+				}
+				else
+				{
+					foreach (var subtitlesFile in subtitlesFiles)
+					{
+			<tr>
+			 <td>@subtitlesFile.Title</td>
+			 <td>@subtitlesFile.Language</td>
+			 <td>@subtitlesFile.Description</td>
+			 <td>@subtitlesFile.Filename</td>
+			 <td>
+			  <a class="btn btn-primary btn-sm" @onclick="() => DeleteFile(subtitlesFile.ID)">Delete</a>
+			  󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" href="~/Saved Sub Files/"
+								   download="@subtitlesFile.Filename.Substring(0, subtitlesFile.Filename.IndexOf("--"))" target="_top">
+			   Download
+			  </a>
+			 </td>
+			</tr>
+					}
+				}
+   </tbody>
+  </table>
+ </div>
+ <br />
+ <br />
 </div>
 
 @if (showModal)
 {
-    <div class="modal fade show" id="subtitlesModal" style="display:block" aria-modal="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
+	<div class="modal fade show" id="subtitlesModal" style="display:block" aria-modal="true">
+	 <div class="modal-dialog">
+	  <div class="modal-content">
 
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h3>Add subtitles</h3>
-                    <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
-                </div>
+	   <!-- Modal Header -->
+			<div class="modal-header">
+		<h3>Add subtitles</h3>
+		<button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+	   </div>
 
-                <!-- Modal body -->
-                <EditForm Model="@subtitlesFile" OnValidSubmit="CreateSubtitles" OnInvalidSubmit="InvalidFormSubmitted">
-                    <div class="modal-body">
-                        <div class="col-md-12">
-                            <DataAnnotationsValidator />
-                            <ValidationSummary />
-                            <div class="form-group">
-                                <label for="Title">Title</label>
-                                <InputText form="Title" class="form-control" maxlength="100"
-                                           @bind-Value="@subtitlesFile.Title" />
-                                <ValidationMessage For="@(() => subtitlesFile.Title)" />
-                                <br />
-                                <label for="Description">Description</label>
-                                <InputTextArea form="Description" class="form-control" maxlength="500"
-                                               @bind-Value="@subtitlesFile.Description" />
-                                <ValidationMessage For="@(() => subtitlesFile.Description)" />
-                                <br />
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="Language">Language</label>
-                                        <br />
-                                        <InputSelect class="custom-select" form="Language" @bind-Value="subtitlesFile.Language">
-                                            <option selected="selected">Select a language</option>
-                                            @foreach (var language in Enum.GetValues(typeof(Soundtrack)))
-                                                {
-                                                <option value="@language">@language</option>
-                                                }
-                                        </InputSelect>
-                                        <ValidationMessage For="@(() => subtitlesFile.Language)" />
-                                    </div>
-                                </div>
-                                <br />
-                                <br />
-                                <label for="Image">Image</label>
-                                <InputFile OnChange="LoadFile" />
-                            </div>
-                            <hr />
-                        </div>
-                    </div>
+	   <!-- Modal body -->
+			<EditForm Model="@subtitlesFile" OnValidSubmit="CreateSubtitles" OnInvalidSubmit="InvalidFormSubmitted">
+		<div class="modal-body">
+		 <div class="col-md-12">
+		  <DataAnnotationsValidator />
+		  <ValidationSummary />
+		  <div class="form-group">
+		   <label for="Title">Title</label>
+		   <InputText form="Title" class="form-control" maxlength="100"
+									   @bind-Value="@subtitlesFile.Title" />
+		   <ValidationMessage For="@(() => subtitlesFile.Title)" />
+		   <br />
+		   <label for="Description">Description</label>
+		   <InputTextArea form="Description" class="form-control" maxlength="500"
+										   @bind-Value="@subtitlesFile.Description" />
+		   <ValidationMessage For="@(() => subtitlesFile.Description)" />
+		   <br />
+		   <div class="row">
+			<div class="col">
+			 <label for="Language">Language</label>
+			 <br />
+			 <InputSelect class="custom-select" form="Language" @bind-Value="subtitlesFile.Language">
+			  <option selected="selected">Select a language</option>
+											@foreach (var language in Enum.GetValues(typeof(Soundtrack)))
+											{
+			  <option value="@language">@language</option>
+											}
+		 </InputSelect>
+		 <ValidationMessage For="@(() => subtitlesFile.Language)" />
+		</div>
+	   </div>
+	   <br />
+	   <br />
+	   <label for="Image">Image</label>
+	   <InputFile OnChange="LoadFile" />
+	  </div>
+	  <hr />
+	 </div>
+	</div>
 
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <input type="submit" class="btn btn-primary" value="Save" />
-                        <button type="button" class="btn btn-warning" @onclick="@ModalCancel">Close</button>
-                    </div>
-                </EditForm>
-            </div>
-        </div>
-    </div>
+	<!-- Modal footer -->
+				<div class="modal-footer">
+	 <input type="submit" class="btn btn-primary" value="Save" />
+	 <button type="button" class="btn btn-warning" @onclick="@ModalCancel">Close</button>
+	</div>
+   </EditForm>
+  </div>
+ </div>
+</div>
 }
 
 
 @code {
 
-    [Parameter]
-    public Guid Id { get; set; }
-    bool showModal = false;
-    string blurStyle;
+	[Parameter]
+	public Guid Id { get; set; }
+	bool showModal = false;
+	string blurStyle;
 
-    private string searchTerm;
-    private string SearchTerm
-    {
-        get { return searchTerm; }
-        set { searchTerm = value; FilterRecords(); }
-    }
+	private string searchTerm;
+	private string SearchTerm
+	{
+		get { return searchTerm; }
+		set { searchTerm = value; FilterRecords(); }
+	}
 
-    MovieView movie = new MovieView();
-    Director director = new Director();
-    List<SubtitlesFile> subtitlesFiles;
-    SubtitlesFile subtitlesFile = new SubtitlesFile();
+	MovieView movie = new MovieView();
+	Director director = new Director();
+	List<SubtitlesFile> subtitlesFiles;
+	SubtitlesFile subtitlesFile = new SubtitlesFile();
 
-    #region Pagination
+	#region Pagination
 
-    int totalPages;
-    int totalRecords;
-    int curPage;
-    int pagerSize;
-    int pageSize;
-    int startPage;
-    int endPage;
-    string sortColumnName = "Id";
-    string sortDir = "DESC";
+	int totalPages;
+	int totalRecords;
+	int curPage;
+	int pagerSize;
+	int pageSize;
+	int startPage;
+	int endPage;
+	string sortColumnName = "Id";
+	string sortDir = "DESC";
 
-    #endregion
+	#endregion
 
-    void ModalShow()
-    {
-        blurStyle = "-webkit-filter: blur(5px) grayscale(90%);";
-        showModal = true;
-    }
+	void ModalShow()
+	{
+		blurStyle = "-webkit-filter: blur(5px) grayscale(90%);";
+		showModal = true;
+	}
 
-    void ModalCancel()
-    {
-        navigationManager.NavigateTo($"/viewMovie/{movie.ID}");
-        blurStyle = "-webkit-filter: blur(0px) grayscale(0%);";
-        showModal = false;
-    }
+	void ModalCancel()
+	{
+		navigationManager.NavigateTo($"/viewMovie/{movie.ID}");
+		blurStyle = "-webkit-filter: blur(0px) grayscale(0%);";
+		showModal = false;
+	}
 
-    protected override async Task OnInitializedAsync()
-    {
-        //display total page buttons
-        pagerSize = 3;
-        pageSize = 5;
-        curPage = 1;
+	protected override async Task OnInitializedAsync()
+	{
+		//display total page buttons
+		pagerSize = 3;
+		pageSize = 5;
+		curPage = 1;
 
-        director = await directorService.GetById(movie.DirectorID);
-        movie = await movieService.GetById(Id);
-        subtitlesFiles = await subtitlesService.ListByMovieId(movie.ID, (curPage - 1) * pageSize, pageSize, sortColumnName, sortDir, searchTerm);
-        totalRecords = await subtitlesService.Count(searchTerm);
-        totalPages = (int)Math.Ceiling(totalRecords / (decimal)pageSize);
-        SetPagerSize("forward");
-    }
+		director = await directorService.GetById(movie.DirectorID);
+		movie = await movieService.GetById(Id);
+		subtitlesFiles = await subtitlesService.ListByMovieId(movie.ID, (curPage - 1) * pageSize, pageSize, sortColumnName, sortDir, searchTerm);
+		totalRecords = await subtitlesService.Count(searchTerm);
+		totalPages = (int)Math.Ceiling(totalRecords / (decimal)pageSize);
+		SetPagerSize("forward");
+	}
 
-    protected async Task CreateSubtitles()
-    {
-        subtitlesFile.MovieID = movie.ID;
-        await subtitlesService.Create(subtitlesFile);
-        ModalCancel();
-        subtitlesFiles = await subtitlesService.ListByMovieId(movie.ID, (curPage - 1) * pageSize, pageSize, sortColumnName, sortDir, searchTerm);
-    }
+	protected async Task CreateSubtitles()
+	{
+		subtitlesFile.MovieID = movie.ID;
+		await subtitlesService.Create(subtitlesFile);
+		ModalCancel();
+		subtitlesFiles = await subtitlesService.ListByMovieId(movie.ID, (curPage - 1) * pageSize, pageSize, sortColumnName, sortDir, searchTerm);
+	}
 
-    protected async Task LoadFile(InputFileChangeEventArgs e)
-    {
-        var subFile = e.File;
-        Stream stream = subFile.OpenReadStream();
-        var path = $"{environment.WebRootPath}\\Saved Sub Files\\{subFile.Name}";
-        FileStream fs = File.Create(path);
-        await stream.CopyToAsync(fs);
-        stream.Close();
-        fs.Close();
+	protected async Task LoadFile(InputFileChangeEventArgs e)
+	{
+		var subFile = e.File;
+		Stream stream = subFile.OpenReadStream();
+		var path = $"{environment.WebRootPath}\\Saved Sub Files\\{subFile.Name}";
+		FileStream fs = File.Create(path);
+		await stream.CopyToAsync(fs);
+		stream.Close();
+		fs.Close();
 
-        subtitlesFile.Filename = string.Join("--", subFile.Name, DateTime.UtcNow);
-    }
+		subtitlesFile.Filename = string.Join("--", subFile.Name, DateTime.UtcNow);
+	}
 
-    protected async Task DeleteFile(Guid subFileId)
-    {
-        await subtitlesService.Delete(subFileId);
-        subtitlesFiles = await subtitlesService.ListByMovieId(movie.ID, (curPage - 1)
-* pageSize, pageSize, sortColumnName, sortDir, searchTerm);
-    }
+	protected async Task DeleteFile(Guid subFileId)
+	{
+		await subtitlesService.Delete(subFileId);
+		subtitlesFiles = await subtitlesService.ListByMovieId(movie.ID, (curPage - 1)
+	* pageSize, pageSize, sortColumnName, sortDir, searchTerm);
+	}
 
-    public async Task refreshRecords(int currentPage)
-    {
-        subtitlesFiles = await subtitlesService.ListByMovieId
-       (movie.ID, (currentPage - 1) * pageSize, pageSize, sortColumnName,
-       sortDir, searchTerm);
-        curPage = currentPage;
-        this.StateHasChanged();
-    }
+	public async Task refreshRecords(int currentPage)
+	{
+		subtitlesFiles = await subtitlesService.ListByMovieId
+				(movie.ID, (currentPage - 1) * pageSize, pageSize, sortColumnName,
+				sortDir, searchTerm);
+		curPage = currentPage;
+		this.StateHasChanged();
+	}
 
-    public void SetPagerSize(string direction)
-    {
-        if (direction == "forward" && endPage < totalPages)
-        {
-            startPage = endPage + 1;
-            if (endPage + pagerSize < totalPages)
-            {
-                endPage = startPage + pagerSize - 1;
-            }
-            else
-            {
-                endPage = totalPages;
-            }
-            this.StateHasChanged();
-        }
-        else if (direction == "back" && startPage > 1)
-        {
-            endPage = startPage - 1;
-            startPage = startPage - pagerSize;
-        }
-        else
-        {
-            startPage = 1;
-            endPage = totalPages;
-        }
-    }
+	public void SetPagerSize(string direction)
+	{
+		if (direction == "forward" && endPage < totalPages)
+		{
+			startPage = endPage + 1;
+			if (endPage + pagerSize < totalPages)
+			{
+				endPage = startPage + pagerSize - 1;
+			}
+			else
+			{
+				endPage = totalPages;
+			}
+			this.StateHasChanged();
+		}
+		else if (direction == "back" && startPage > 1)
+		{
+			endPage = startPage - 1;
+			startPage = startPage - pagerSize;
+		}
+		else
+		{
+			startPage = 1;
+			endPage = totalPages;
+		}
+	}
 
-    public async Task NavigateToPage(string direction)
-    {
-        if (direction == "next")
-        {
-            if (curPage < totalPages)
-            {
-                if (curPage == endPage)
-                {
-                    SetPagerSize("forward");
-                }
-                curPage += 1;
-            }
-        }
-        else if (direction == "previous")
-        {
-            if (curPage > 1)
-            {
-                if (curPage == startPage)
-                {
-                    SetPagerSize("back");
-                }
-                curPage -= 1;
-            }
-        }
-        await refreshRecords(curPage);
-    }
+	public async Task NavigateToPage(string direction)
+	{
+		if (direction == "next")
+		{
+			if (curPage < totalPages)
+			{
+				if (curPage == endPage)
+				{
+					SetPagerSize("forward");
+				}
+				curPage += 1;
+			}
+		}
+		else if (direction == "previous")
+		{
+			if (curPage > 1)
+			{
+				if (curPage == startPage)
+				{
+					SetPagerSize("back");
+				}
+				curPage -= 1;
+			}
+		}
+		await refreshRecords(curPage);
+	}
 
-    public void FilterRecords()
-    {
-        endPage = 0;
-        this.OnInitializedAsync().Wait();
-    }
+	public void FilterRecords()
+	{
+		endPage = 0;
+		this.OnInitializedAsync().Wait();
+	}
 
-    protected void InvalidFormSubmitted()
-    {
-        navigationManager.NavigateTo($"/viewMovie/{movie.ID}");
-        showModal = true;
-    }
+	protected void InvalidFormSubmitted()
+	{
+		navigationManager.NavigateTo($"/viewMovie/{movie.ID}");
+		showModal = true;
+	}
+
+	protected void ReturnToPreviousSite()
+	{
+		navigationManager.NavigateTo("/movies");
+	}
 }
