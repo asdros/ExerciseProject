@@ -57,15 +57,15 @@ namespace ExerciseProject.Services
                        commandType, transaction: tran).FirstOrDefault();
                     tran.Commit();
                 }
-                catch (Exception ex)
+                catch (DataException ex)
                 {
                     tran.Rollback();
-                    throw ex;
+                    throw new DataException($"Unable to execute the query: {ex}");
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception($"Unable to connect with database: {ex}");
             }
             finally
             {
@@ -90,15 +90,15 @@ namespace ExerciseProject.Services
                        commandType, transaction: tran).FirstOrDefault();
                     tran.Commit();
                 }
-                catch (Exception ex)
+                catch (DataException ex)
                 {
                     tran.Rollback();
-                    throw ex;
+                    throw new DataException($"Unable to execute the query: {ex}");
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception($"Unable to connect with database: {ex}");
             }
             finally
             {

@@ -2,6 +2,7 @@
 @inject IMovieService movieService
 @inject IDirectorService directorService
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+@attribute [Authorize(Roles = "Administrator, Moderator")]
 
 <title>Add Movie</title>
 <h3>Add Movie</h3>

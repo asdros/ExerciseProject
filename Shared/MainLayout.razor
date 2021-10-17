@@ -1,70 +1,72 @@
 ﻿@inherits LayoutComponentBase
-        <div class="page" style=@blurStyle>
-            <div class="sidebar">
-                <NavMenu />
-            </div>
 
-            <div class="main">
-                <div class="top-row px-4">
-                    <button class="btn btn-success btn-sm" @onclick="@ModalShow">About</button>
-                </div>
-                <div class="content px-4">
-                    @Body
-                </div>
-            </div>
-        </div>
+<div class="page" style=@blurStyle>
+	<div class="sidebar">
+		<NavMenu />
+	</div>
 
+	<div class="main">
+		<div class="top-row px-4">
+			<LoginDisplay />
+			<a class="btn btn-success btn-sm" @onclick="@ModalShow">About</a>
+		</div>
+		<div class="content px-4">
+			@Body
+		</div>
+	</div>
+</div>
 
         @if (showModal)
-        {
-            <div class="modal fade show" id="myModal" style="display:block" aria-modal="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
-                        </div>
-
-                        <!-- Modal body -->
-                        <div class="modal-body">
-                            <p>Technologies used:
-                            </p>
-                            <ul>
-                                <li>C#</li>
-                                <li>Blazor Webassembly</li>
-                                <li>Bootstrap</li>
-                                <li>Dapper ORM</li>
-                                <li>Sql Server</li>
-                            </ul>
-
-                            <p style="text-align: center; font-weight: bold">Author: Szymon <br />034203 WSG</p>
-                        </div>
-
-                        <!-- Modal footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-warning" @onclick="@ModalCancel">Close</button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        }
-
-    @code
 {
-        bool showModal = false;
-        string blurStyle;
+	<div class="modal fade show" id="myModal" style="display:block" aria-modal="true">
+	 <div class="modal-dialog">
+	  <div class="modal-content">
 
-        void ModalShow()
-        {
-            blurStyle = "-webkit-filter: blur(5px) grayscale(90%);";
-            showModal = true;
-        }
+	   <!-- Modal Header -->
+			<div class="modal-header">
+		<button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+	   </div>
 
-        void ModalCancel()
-        {
-            blurStyle = "-webkit-filter: blur(0px) grayscale(0%);";
-            showModal = false;
-        }
+	   <!-- Modal body -->
+			<div class="modal-body">
+		<p>
+		 Technologies used:
+		</p>
+		<ul>
+		 <li>C#</li>
+		 <li>Blazor Webassembly</li>
+		 <li>Bootstrap</li>
+		 <li>Dapper ORM</li>
+		 <li>Sql Server</li>
+		</ul>
+
+		<p style="text-align: center; font-weight: bold">Author: Szymon <br />034203 WSG</p>
+	   </div>
+
+	   <!-- Modal footer -->
+			<div class="modal-footer">
+		<button type="button" class="btn btn-warning" @onclick="@ModalCancel">Close</button>
+	   </div>
+
+	  </div>
+	 </div>
+	</div>
+}
+
+@code
+{
+	bool showModal = false;
+	string blurStyle;
+
+	void ModalShow()
+	{
+		blurStyle = "-webkit-filter: blur(5px) grayscale(90%);";
+		showModal = true;
+	}
+
+	void ModalCancel()
+	{
+		blurStyle = "-webkit-filter: blur(0px) grayscale(0%);";
+		showModal = false;
+	}
     }

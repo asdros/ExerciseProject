@@ -2,6 +2,8 @@
 @inject IMovieService movieService
 @inject IDirectorService directorService
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize]
 
 <title>Edit Movie</title>
 <h3>Edit Movie</h3>
