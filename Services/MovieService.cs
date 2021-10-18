@@ -89,6 +89,14 @@ namespace ExerciseProject.Services
                     commandType: CommandType.Text));
             return deletePoster;
         }
+
+        public Task<int> UpdateStatus(Guid id, bool value)
+        {
+            bool newStatus = !value;
+            var movie = Task.FromResult
+                (_dapperService.Update<int>($"UPDATE [dbo].[Movie] SET [isApproved] = '{newStatus}' WHERE [Id] = CAST('{id}' AS UNIQUEIDENTIFIER)"));
+            return movie;
+        }
     }
 }
 
