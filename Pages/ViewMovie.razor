@@ -42,22 +42,26 @@
     </div>
     <br />
     <br />
-    <div class="row justify-content-between">
-        <div class="col-md-5">
-        </div>
-        <div class="col-md-6">
-            <button type="button" class="btn btn-warning btn-lg" @onclick="@ModalShow">Upload subtitles</button>
-        </div>
-    </div>
+
     <br />
     <br />
-    <div class="row justify-content-between">
-        <div class="row col-md-3 pull-left">
+    <div class="row justify-content-start">
+            <div class="col-md-3">
             <input type="text" id="txtSearch"
                    placeholder="Search Titles or Director's surname..."
                    class="form-control" @bind="SearchTerm"
                    @bind:event="oninput" />
-        </div>
+                   </div><div class="col-md-3">
+                               <AuthorizeView>
+                <Authorized>
+            <button type="button" class="btn btn-warning btn-lg" @onclick="@ModalShow">Upload subtitles</button>
+            </Authorized>
+			   <NotAuthorized>
+                               <button type="button" class="btn btn-warning btn-lg"title="You are not authorized!"
+                                        style="opacity: 0.9; cursor: not-allowed;" disabled>Upload subtitles</button>
+                   </NotAuthorized>
+            </AuthorizeView>
+            </div>
     </div>
     <br />
     <br />
@@ -88,23 +92,22 @@
                             <td>@subtitlesFile.Language</td>
                             <td>@subtitlesFile.Description</td>
                             <td>@subtitlesFile.Filename</td>
-                            <td>
+                            <td>  
+                                <AuthorizeView Roles="Administrator, Moderator">
                                 <a class="btn btn-primary btn-sm" @onclick="() => DeleteFile(subtitlesFile.ID)">Delete</a>
+                                                                          </AuthorizeView>
                                 󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" href="~/Saved Sub Files/"
-                                           download="@subtitlesFile.Filename.Substring(0, subtitlesFile.Filename.IndexOf("--"))" target="_top">
-                                    Download
-                                </a>
+                                          download="@subtitlesFile.Filename.Substring(0, subtitlesFile.Filename.IndexOf("--"))" target="_top">Download</a>
                             </td>
                         </tr>
                     }
                 }
             </tbody>
-        </table>
-    </div>
+        </table>     
+    </div>  
     <br />
     <br />
 </div>
-
 @if (showModal)
 {
     <div class="modal fade show" id="subtitlesModal" style="display:block" aria-modal="true">

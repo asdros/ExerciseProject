@@ -6,26 +6,7 @@
 
 <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0
 /css/font-awesome.min.css" rel="stylesheet">
-
-<style>
-	.sort-th {
-		cursor: pointer;
-	}
-
-	.fa {
-		float: right;
-	}
-
-	.btn-custom {
-		color: black;
-		float: left;
-		padding: 8px 16px;
-		text-decoration: none;
-		transition: background-color .3s;
-		border: 2px solid #000;
-		margin: 0px 5px 0px 5px;
-	}
-</style>
+<link href="css/site.css" rel="stylesheet" />
 
 <div>
 	<a class="btn btn-primary"
@@ -50,37 +31,50 @@ else
 	<table class="table table-bordered table-hover">
 	 <thead>
 	  <tr>
-	   <th class="sort-th"
-				@onclick="@(() => SortTable("Title"))">
-		Title<span class="fa @(SetSortIcon("Title"))"></span>
-	   </th>
-	   <th class="sort-th"
-				@onclick="@(() => SortTable("YearOfProduction"))">
-		Year Of Production
-		<span class="fa @(SetSortIcon("YearOfProduction"))"></span>
-	   </th>
-	   <th class="sort-th"
-				@onclick="@(() => SortTable("OriginalSoundtrack"))">
-		Original soundtrack
-		<span class="fa @(SetSortIcon("OriginalSoundtrack"))"></span>
-	   </th>
-	   <th class="sort-th"
-				@onclick="@(() => SortTable("Genre"))">
-		Genre
-		<span class="fa @(SetSortIcon("Genre"))"></span>
-	   </th>
-	   <th>
-		Director
-	   </th>
-	   <th>
-		Other titles
-	   </th>
-	   <th class="sort-th"
-				@onclick="@(() => SortTable("CreatedAt"))">
-		Created At
-		<span class="fa @(SetSortIcon("CreatedAt"))"></span>
-	   </th>
-	   <th>Action</th>
+	   <AuthorizeView>
+		<NotAuthorized>
+		 <th class="sort-th"
+						@onclick="@(() => SortTable("Title"))">
+		  Title<span class="fa @(SetSortIcon("Title and production year"))"></span>
+		 </th>
+		 <th>
+		  Director
+		 </th>
+		</NotAuthorized>
+		<Authorized>
+		 <th class="sort-th"
+						@onclick="@(() => SortTable("Title"))">
+		  Title<span class="fa @(SetSortIcon("Title"))"></span>
+		 </th>
+		 <th class="sort-th"
+						@onclick="@(() => SortTable("YearOfProduction"))">
+		  Year Of Production
+		  <span class="fa @(SetSortIcon("YearOfProduction"))"></span>
+		 </th>
+		 <th class="sort-th"
+						@onclick="@(() => SortTable("OriginalSoundtrack"))">
+		  Original soundtrack
+		  <span class="fa @(SetSortIcon("OriginalSoundtrack"))"></span>
+		 </th>
+		 <th class="sort-th"
+						@onclick="@(() => SortTable("Genre"))">
+		  Genre
+		  <span class="fa @(SetSortIcon("Genre"))"></span>
+		 </th>
+		 <th>
+		  Director
+		 </th>
+		 <th>
+		  Other titles
+		 </th>
+		 <th class="sort-th"
+						@onclick="@(() => SortTable("CreatedAt"))">
+		  Created At
+		  <span class="fa @(SetSortIcon("CreatedAt"))"></span>
+		 </th>
+		 <th>Action</th>
+		</Authorized>
+	   </AuthorizeView>
 	  </tr>
 	 </thead>
 	 <tbody>
@@ -94,47 +88,59 @@ else
 			{
 				foreach (var movie in movies)
 				{
-				<AuthorizeView Context="movieContext">
-					@if (!((movieContext.User.HasClaim(ClaimTypes.Role, "Visitor") || !movieContext.User.Identity.IsAuthenticated) && (movie.isApproved == false)))
+			  <AuthorizeView Context="movieContext">
+			   <NotAuthorized>
+							@if (movie.isApproved == true)
 						{
-							<tr>
-								<td>@movie.Title</td>
-								<td>@movie.YearOfProduction</td>
-								<td>@movie.OriginalSoundtrack</td>
-								<td>@movie.Genre</td>
-								<td>@movie.Firstname @movie.Surname</td>
-								<td>@movie.OtherTitles</td>
-								<td>@movie.CreatedAt</td>
-								<td>
-									<a class="btn btn-info btn-sm" href='/viewMovie/@movie.ID'>
-										View
-									</a>
-									<AuthorizeView Roles="Administrator, Moderator">
-										<Authorized>
-											<a class="btn btn-primary btn-sm" href='/editMovie/@movie.ID'>
-												Edit
-											</a>
-											󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" @onclick="() => DeleteMovie(movie.ID)">
-												Delete
-											</a>
-											󠀠󠀠󠀠󠀠<a class="btn btn-@(movie.isApproved == true ? "danger" : "info") btn-sm" @onclick="() => MakeVisible(movie.ID, movie.isApproved)">
-												@(movie.isApproved == true ? "Is visible" : "Isn't visible")
-											</a>
-										</Authorized>
-										<NotAuthorized>
-											<a class="btn btn-primary btn-sm" title="You are not authorized!" style="opacity: 0.9; cursor: not-allowed;" disabled>
-												Edit
-											</a>
-											󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" title="You are not authorized!" style="opacity: 0.9; cursor: not-allowed;" disabled>
-												Delete
-											</a>
-										</NotAuthorized>
-									</AuthorizeView>
-
-								</td>
-							</tr>
+				<tr>
+				 <td>
+				  <a href="/viewMovie/@movie.ID"> @(movie.Title.Length >= 40 ? @movie.Title.Remove(30) + "...   " : @movie.Title)</a> @movie.YearOfProduction
+				 </td>
+				 <td>
+									@movie.Firstname @movie.Surname
+				 </td>
+				</tr>
 						}
-			  </AuthorizeView>
+		   </NotAuthorized>
+		   <Authorized>
+						@if (!(movieContext.User.HasClaim(ClaimTypes.Role, "Visitor") && (movie.isApproved == false)))
+						{
+				<tr>
+				 <td>@(movie.Title.Length >= 30 ? @movie.Title.Remove(20) + "...   " : @movie.Title)</td>
+				 <td>@movie.YearOfProduction</td>
+				 <td>@movie.OriginalSoundtrack</td>
+				 <td>@movie.Genre</td>
+				 <td>@movie.Firstname @movie.Surname</td>
+				 <td>@(movie.OtherTitles.Length >= 30 ? @movie.OtherTitles.Remove(20) + "...   " : @movie.OtherTitles)</td>
+				 <td>@movie.CreatedAt</td>
+				 <td>
+				  <a class="btn btn-info btn-sm" href='/viewMovie/@movie.ID'>
+				   View
+				  </a>
+				  <AuthorizeView Roles="Administrator, Moderator">
+				   <Authorized>
+					<a class="btn btn-primary btn-sm" href='/editMovie/@movie.ID'>
+					 Edit
+					</a>
+					󠀠󠀠󠀠󠀠<a class="btn btn-warning btn-sm" @onclick="() => DeleteMovie(movie.ID)">
+					 Delete
+					</a>
+					󠀠󠀠󠀠󠀠<a class="btn btn-@(movie.isApproved == true ? "danger" : "info") btn-sm" @onclick="() => MakeVisible(movie.ID, movie.isApproved)">
+												@(movie.isApproved == true ? "Is visible" : "Isn't visible")
+					</a>
+				   </Authorized>
+				   <NotAuthorized>
+					<a class="btn btn-primary btn-sm" title="You are not authorized!" style="opacity: 0.9; cursor: not-allowed;" disabled>
+					 Edit
+					</a>
+				   </NotAuthorized>
+				  </AuthorizeView>
+
+				 </td>
+				</tr>
+						}
+		   </Authorized>
+		  </AuthorizeView>
 				}
 			}
 	 </tbody>
@@ -160,17 +166,9 @@ else
 			@onclick=@(async ()=>await NavigateToPage("next"))>
 	  ▶
 	 </button>
-	 	</div>
-	 <h2>Claims</h2>
-<AuthorizeView>
-    <ul>
-        @foreach (var claim in context.User.Claims)
-        {
-            <li><b>@claim.Type</b>: @claim.Value</li>
-        }
-    </ul>
-</AuthorizeView>
+	</div>
 }
+
 @code {
 	private string searchTerm;
 	private string SearchTerm
