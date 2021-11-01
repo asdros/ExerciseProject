@@ -87,12 +87,13 @@
         }
         else
         {
-            <img src="@imageToDisplay" />
+            <EditForm Model="@movie" OnValidSubmit="UpdateMovie" OnInvalidSubmit="InvalidFormSubmitted">
+            <label for="Image">Image</label>
+                <InputFile OnChange="LoadFile" bind-value="@movie.FileData" />
+                </EditForm>
         }
     </div>
 </div>
-
-
 
 @code {
 
@@ -103,16 +104,15 @@
     MovieView movie = new MovieView();
     List<Director> directors = new List<Director>();
 
-
     protected override async Task OnInitializedAsync()
     {
         directors = await directorService.FetchAll();
-        movie = await movieService.GetById(Id);
+        movie = await movieService.GetById(Id, "Movie");
     }
 
     protected async Task UpdateMovie()
     {
-        await movieService.Update(movie);
+        await movieService.Update(movie, "MovieEditingOverview");
         navigationManager.NavigateTo("/movies");
     }
 
@@ -135,9 +135,17 @@
         movie.Filename = filename;
     }
 
+    private void ClearPosterInfo()
+    {
+        movie.PosterID = null;
+        movie.FileData = null;
+    }
+
     protected async Task DeletePoster(Guid? id)
     {
         await movieService.DeletePoster(id);
+        ClearPosterInfo();
+        await movieService.Update(movie, "MovieEditingOverview");
         navigationManager.NavigateTo($"/editMovie/{movie.ID}");
     }
 

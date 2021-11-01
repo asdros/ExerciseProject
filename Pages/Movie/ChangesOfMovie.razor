@@ -1,0 +1,96 @@
+﻿@page "/changesofmovie/{Id:guid}"
+@inject IMovieService movieService
+@inject IDirectorService directorService
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize(Roles = "Administrator, Moderator")]
+
+<title>Edit Movie</title>
+<h3>Edit Movie</h3>
+
+<div class="row">
+    <div class="col-md-4">
+            <div class="form-group">
+                <br />
+                <div class="row">
+                <h3>Old poster</h3>
+                        <img src="@movieSaved.FileData" />
+                        <br />
+                        <br />
+                          <h3>New poster</h3>
+                        <img src="@movieUnapproved.FileData" />
+                        <br />
+                        <br />
+                        </div>
+                <h3>Title</h3>
+                <p>@((MarkupString)CheckValues(movieSaved.Title, movieUnapproved.Title))</p>
+                <br />
+                <h3>Year of production</h3>
+                <p>@((MarkupString)CheckValues(movieSaved.YearOfProduction.ToString(), movieUnapproved.YearOfProduction.ToString()))</p>
+                <br />
+                <h3>Original soundtrack</h3>
+                <p>@((MarkupString)CheckValues(movieSaved.OriginalSoundtrack, movieUnapproved.OriginalSoundtrack))</p>
+                <br />
+                <h3>Genre</h3>
+                <p>@((MarkupString)CheckValues(movieSaved.Genre, movieUnapproved.Genre))</p>
+                <br />
+                <h3>Director</h3>
+                <p>@((MarkupString)CheckValues(movieSaved.Firstname, movieUnapproved.Firstname)) 
+                    @((MarkupString)CheckValues(movieSaved.Surname, movieUnapproved.Surname))</p>
+                <br />
+                <h3>Description</h3>
+                <p>@((MarkupString)CheckValues(movieSaved.Description, movieUnapproved.Description))</p>
+                <br />
+                <h3>Other titles</h3>
+               <p>@((MarkupString)CheckValues(movieSaved.OtherTitles, movieUnapproved.OtherTitles))</p>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" @onclick="() => UpdateMovie()">Accept changes</button>
+                <button type="button" class="btn btn-warning" @onclick="() => Cancel()">Cancel</button>
+            </div>
+    </div>
+    <div class="col-md-5">
+        <br />
+        <br />
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public Guid Id { get; set; }
+
+    MovieView movieSaved = new MovieView();
+    MovieView movieUnapproved = new MovieView();
+    List<Director> directors = new List<Director>();
+
+    protected string CheckValues(string oldValue, string newValue)
+    {
+        if(oldValue == newValue)
+        {
+            return oldValue;
+        }
+        else
+        {
+            return $"<s>{oldValue}</s><br/><mark>{newValue}</mark>";
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        directors = await directorService.FetchAll();
+        movieSaved = await movieService.GetById(Id, "Movie");
+        movieUnapproved = await movieService.GetById(Id, "MovieEditingOverview");
+    }
+
+    protected async Task UpdateMovie()
+    {
+        await movieService.Update(movieUnapproved, "Movie");
+        navigationManager.NavigateTo("/movies");
+    }
+
+    protected void Cancel()
+    {
+        navigationManager.NavigateTo("/movies");
+    }
+}

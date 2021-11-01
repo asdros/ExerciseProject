@@ -18,6 +18,7 @@ namespace ExerciseProject.Services
             _configuration = configuration;
             _dapperService = dapperService;
         }
+       
         private Guid? CreatePoster(MovieView movie)
         {
             Guid? posterId = null;
@@ -28,6 +29,7 @@ namespace ExerciseProject.Services
             }
             return posterId;
         }
+        
         public Task<int> Create(MovieView movie)
         {
             var posterId = CreatePoster(movie);
@@ -37,20 +39,20 @@ namespace ExerciseProject.Services
             return movieId;
         }
 
-        public Task<MovieView> GetById(Guid id)
+        public Task<MovieView> GetById(Guid id, string table)
         {
             var movie = Task.FromResult
                (_dapperService.Get<MovieView>
-               ($"SELECT [Movie].*, [Director].[Firstname], [Director].[Surname], [UploadedFile].[Filename], [UploadedFile].[FileData] FROM [Movie] LEFT OUTER JOIN [Director] ON [Movie].[DirectorID] = [Director].[Id] LEFT OUTER JOIN [UploadedFile] ON [Movie].[PosterId] = [UploadedFile].[IdFile]WHERE [Movie].[Id] = CAST('{id}' AS UNIQUEIDENTIFIER)",
+               ($"SELECT [{table}].*, [Director].[Firstname], [Director].[Surname], [UploadedFile].[Filename], [UploadedFile].[FileData] FROM [{table}] LEFT OUTER JOIN [Director] ON [{table}].[DirectorID] = [Director].[Id] LEFT OUTER JOIN [UploadedFile] ON [{table}].[PosterId] = [UploadedFile].[IdFile]WHERE [{table}].[Id] = CAST('{id}' AS UNIQUEIDENTIFIER)",
                commandType: CommandType.Text));
             return movie;
         }
 
-        public Task<int> Delete(Guid id)
+        public Task<int> Delete(Guid id, string table)
         {
             var deleteMovie = Task.FromResult
                (_dapperService.Execute
-               ($"Delete [Movie] where Id = CAST('{id}' AS UNIQUEIDENTIFIER)",
+               ($"Delete [{table}] where Id = CAST('{id}' AS UNIQUEIDENTIFIER)",
                commandType: CommandType.Text));
             return deleteMovie;
         }
@@ -73,11 +75,11 @@ namespace ExerciseProject.Services
             return movies;
         }
 
-        public Task<int> Update(MovieView movie)
+        public Task<int> Update(MovieView movie, string table)
         {
             var posterId = CreatePoster(movie);
             var updateMovie = Task.FromResult
-               (_dapperService.Update<int>($"UPDATE [dbo].[Movie] SET [Title] = '{movie.Title}', [YearOfProduction] = '{movie.YearOfProduction}', [OriginalSoundtrack] = '{movie.OriginalSoundtrack}', [Genre] = '{movie.Genre}', [DirectorID] = '{movie.DirectorID}', [Description] = '{movie.Description}', [OtherTitles] = '{movie.OtherTitles}', [CreatedAt] = '{DateTime.UtcNow.ToString("yyyy - MM - dd HH: mm:ss")}', [PosterId] = TRY_CAST('{posterId}' AS UNIQUEIDENTIFIER) WHERE [Id] = CAST('{movie.ID}' AS UNIQUEIDENTIFIER)", commandType: CommandType.Text)); //todo
+               (_dapperService.Update<int>($"UPDATE [dbo].[{table}] SET [Title] = '{movie.Title}', [YearOfProduction] = '{movie.YearOfProduction}', [OriginalSoundtrack] = '{movie.OriginalSoundtrack}', [Genre] = '{movie.Genre}', [DirectorID] = '{movie.DirectorID}', [Description] = '{movie.Description}', [OtherTitles] = '{movie.OtherTitles}', [CreatedAt] = '{DateTime.UtcNow.ToString("yyyy - MM - dd HH: mm:ss")}', [PosterId] = TRY_CAST('{posterId}' AS UNIQUEIDENTIFIER) WHERE [Id] = CAST('{movie.ID}' AS UNIQUEIDENTIFIER)", commandType: CommandType.Text)); //todo
             return updateMovie;
         }
 
