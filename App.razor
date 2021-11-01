@@ -1,3 +1,6 @@
+@inject NavigationManager NavigationManager
+
+
 <CascadingAuthenticationState>
 	<Router AppAssembly="@typeof(Program).Assembly">
 		<Found Context="routeData">
@@ -5,8 +8,12 @@
 				<NotAuthorized>
 					@if (!context.User.Identity.IsAuthenticated)
 						{
-					<RedirectToLogin />
-						}
+							var returnUrl =
+							NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+					<RedirectToLogin ReturnUrl="@returnUrl" />
+
+
+					}
 						else
 						{
 					<p>You are not authorized to access this resource.</p>
